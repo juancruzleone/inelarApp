@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert, Image, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const [loginModalVisible, setLoginModalVisible] = useState(false); // State for login modal
 
   const validateLoginFields = (username, password) => {
     if (!username || !password) {
@@ -46,15 +48,14 @@ const LoginScreen = ({ navigation }) => {
       const data = await loginUser(username, password);
       console.log('Login successful:', data);
 
-      // Almacenar el nombre de usuario en AsyncStorage
+      // Store username in AsyncStorage
       await AsyncStorage.setItem('userName', username);
 
-      Alert.alert('Éxito', 'Inicio de sesión exitoso', [
-        { 
-          text: 'OK', 
-          onPress: () => navigation.navigate('Inicio') // Redirigir sin pasar el nombre de usuario por params
-        }
-      ]);
+      setLoginModalVisible(true); // Show the modal
+      setTimeout(() => {
+        setLoginModalVisible(false);
+        navigation.navigate('Inicio');
+      }, 2000); // Modal will disappear after 2 seconds
     } catch (err) {
       console.error('Login error:', err);
       setError(err.message === "Validation error" ? "Usuario o contraseña incorrectos." : `Error en la solicitud: ${err.message}`);
@@ -63,6 +64,23 @@ const LoginScreen = ({ navigation }) => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('userName');
+      setLogoutModalVisible(true); // Show the modal
+      setTimeout(() => {
+        setLogoutModalVisible(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
+      }, 2000); // Modal will disappear after 2 seconds
+    } catch (error) {
+      console.error('Error during logout:', error);
+      Alert.alert('Error', 'Ocurrió un error al cerrar sesión. Inténtelo de nuevo.');
+    }
   };
 
   return (
@@ -111,6 +129,34 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         </Text>
       </View>
+
+      {/* Login Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={loginModalVisible}
+        onRequestClose={() => setLoginModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>Sesión iniciada correctamente</Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Logout Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={logoutModalVisible}
+        onRequestClose={() => setLogoutModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalText}>Sesión cerrada exitosamente</Text>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -135,7 +181,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 40,
     alignItems: 'center',
-    marginTop: 10
+    marginTop: 10,
   },
   title: {
     fontSize: 24,
@@ -197,6 +243,24 @@ const styles = StyleSheet.create({
   registerLink: {
     color: '#C75F00',
     fontWeight: 'bold',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: '#1b1b1b',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
 
