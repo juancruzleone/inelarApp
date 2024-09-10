@@ -1,20 +1,20 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import PantallaCarga from './screens/pantallacarga';
+import PantallaCarga from './screens/PantallaCarga';
 import Login from './screens/login';
-import Inicio from './screens/inicio';
+import Inicio from './screens/Inicio';
 import Capacitaciones from './screens/capacitaciones';
-import Servicios from './screens/servicios';
-import SolicitudInstalacion from './screens/solicitar-instalacion';
-import SolicitudMantenimiento from './screens/solicitar-mantenimiento';
-import SolicitudProvision from './screens/solicitar-provision';
-import SolicitudServiciotecnico from './screens/solicitar-serviciotecnico';
-import CapacitacionDetectores from './screens/capacitacion-detectores';
-import CapacitacionExtintores from './screens/capacitacion-extintores';
-import CapacitacionMangueras from './screens/capacitacion-mangueras';
-import CapacitacionAlarmas from './screens/capacitacion-alarmas';
-import AgregarDispositivo from './screens/agregar-dispostivo';
+import Servicios from './screens/Servicios';
+import SolicitudInstalacion from './screens/SolicitarInstalacion';
+import SolicitudMantenimiento from './screens/SolicitarMantenimiento';
+import SolicitudProvision from './screens/SolicitarProvision';
+import SolicitudServiciotecnico from './screens/SolicitarServicioTecnico';
+import CapacitacionDetectores from './screens/CapacitacionDetectores';
+import CapacitacionExtintores from './screens/CapacitacionExtintores';
+import CapacitacionMangueras from './screens/CapacitacionMangueras';
+import CapacitacionAlarmas from './screens/CapacitacionAlarmas';
+import AgregarDispositivo from './screens/AgregarDispositivo';
 
 const Stack = createStackNavigator();
 

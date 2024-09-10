@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 

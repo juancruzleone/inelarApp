@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-nativ
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 
-export default function Provisiones() {
+export default function SolicitarServicioTecnico() {
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [direccion, setDireccion] = useState('');
@@ -12,8 +12,7 @@ export default function Provisiones() {
   const [cantidad, setCantidad] = useState('');
 
   const handleSolicitud = () => {
-    // Lógica para enviar la solicitud de provisiones
-    console.log('Solicitando provisiones');
+    console.log('Solicitando servicio técnico');
     console.log('Nombre: ' + nombre);
     console.log('Teléfono: ' + telefono);
     console.log('Dirección: ' + direccion);
@@ -26,7 +25,7 @@ export default function Provisiones() {
       <Nav />
       <StatusBar style="auto" translucent={true} />
       <View style={styles.contenido}>
-        <Text style={styles.titulo}>Solicitud de Provisiones</Text>
+        <Text style={styles.titulo}>Solicitud de Servicio Técnico</Text>
         <Text style={styles.label}>Nombre</Text>
         <TextInput
           style={styles.input}
@@ -66,7 +65,7 @@ export default function Provisiones() {
           style={styles.button}
           onPress={handleSolicitud}
         >
-          <Text style={styles.buttonText}>Solicitar Provisiones</Text>
+          <Text style={styles.buttonText}>Solicitar Servicio Técnico</Text>
         </TouchableOpacity>
       </View>
       <Footer />
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 25,
     alignItems: 'center',
-    width: 200,
+    width: 250,
     marginTop: 20,
   },
   buttonText: {

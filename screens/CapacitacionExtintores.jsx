@@ -4,14 +4,13 @@ import { Feather } from '@expo/vector-icons';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 
-export default function ErrorPage() {
+export default function CapacitacionExtintores() {
   const [expandedError, setExpandedError] = useState(null);
 
   const errors = [
     { id: 'error1', title: 'Error 1', solution: 'Solución para el Error 1: Verifique las conexiones del detector.' },
     { id: 'error2', title: 'Error 2', solution: 'Solución para el Error 2: Reemplace la batería del detector.' },
     { id: 'error3', title: 'Error 3', solution: 'Solución para el Error 3: Limpie el detector para eliminar polvo.' },
-    // Add more errors as needed
   ];
 
   const toggleError = (id) => {
@@ -24,7 +23,7 @@ export default function ErrorPage() {
       <View style={styles.containerLogo}>
         <Image
           style={styles.imagenServicio}
-          source={require('../assets/central.png')}
+          source={require('../assets/extintor.png')}
         />
       </View>
       

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker'; // Importa el componente de DatePicker
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 
-export default function InstalacionScreen() {
+export default function SolicitarInstalacion() {
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [direccion, setDireccion] = useState('');
