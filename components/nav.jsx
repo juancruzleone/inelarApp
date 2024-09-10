@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, Image, Alert, Modal } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Nav = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [logoutModalVisible, setLogoutModalVisible] = useState(false); // Estado para el modal
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false); 
   const menuWidth = Dimensions.get('window').width - 100;
   const menuTranslateX = new Animated.Value(-menuWidth);
   const navigation = useNavigation();
@@ -48,19 +49,21 @@ const Nav = () => {
     try {
       await AsyncStorage.removeItem('userName');
       closeMenu();
-      setLogoutModalVisible(true); // Mostrar modal después del logout
+      setLogoutModalVisible(true);
+
+     
+      setTimeout(() => {
+        setLogoutModalVisible(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
+      }, 1500); 
+
     } catch (error) {
       console.error('Error during logout:', error);
       Alert.alert('Error', 'An error occurred while logging out. Please try again.');
     }
-  };
-
-  const handleCloseModal = () => {
-    setLogoutModalVisible(false);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Login' }],
-    });
   };
 
   return (
@@ -109,19 +112,16 @@ const Nav = () => {
         </Animated.View>
       )}
 
-      {/* Modal para la confirmación del logout */}
       <Modal
         visible={logoutModalVisible}
         transparent={true}
         animationType="fade"
-        onRequestClose={handleCloseModal}
+        onRequestClose={() => setLogoutModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>Sesión cerrada exitosamente</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={handleCloseModal}>
-              <Text style={styles.modalButtonText}>OK</Text>
-            </TouchableOpacity>
+            <Ionicons name="checkmark-circle-outline" size={60} color="#4CAF50" style={styles.modalIcon} />
           </View>
         </View>
       </Modal>
@@ -226,8 +226,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: 'white'
+    color: 'white',
   },
+  modalIcon: {
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  /*
   modalButton: {
     backgroundColor: '#C75F00',
     borderRadius: 10,
@@ -240,6 +245,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  */
 });
 
 export default Nav;

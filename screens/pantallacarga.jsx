@@ -14,7 +14,7 @@ const PantallaCarga = ({ navigation }) => {
       }).start(() => {
         navigation.replace('Login');
       });
-    }, 3000); // Tiempo de espera en milisegundos (3 segundos en este ejemplo)
+    }, 3000); 
 
     return () => clearTimeout(timer);
   }, [navigation, fadeAnim]);

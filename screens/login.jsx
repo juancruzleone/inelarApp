@@ -9,8 +9,7 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [loginModalVisible, setLoginModalVisible] = useState(false); // State for login modal
-
+  const [loginModalVisible, setLoginModalVisible] = useState(false); 
   const validateLoginFields = (username, password) => {
     if (!username || !password) {
       return "Ingrese ambos campos para iniciar sesión.";
@@ -48,14 +47,14 @@ const LoginScreen = ({ navigation }) => {
       const data = await loginUser(username, password);
       console.log('Login successful:', data);
 
-      // Store username in AsyncStorage
+  
       await AsyncStorage.setItem('userName', username);
 
-      setLoginModalVisible(true); // Show the modal
+      setLoginModalVisible(true); 
       setTimeout(() => {
         setLoginModalVisible(false);
         navigation.navigate('Inicio');
-      }, 2000); // Modal will disappear after 2 seconds
+      }, 1500); 
     } catch (err) {
       console.error('Login error:', err);
       setError(err.message === "Validation error" ? "Usuario o contraseña incorrectos." : `Error en la solicitud: ${err.message}`);
@@ -69,14 +68,14 @@ const LoginScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userName');
-      setLogoutModalVisible(true); // Show the modal
+      setLogoutModalVisible(true);
       setTimeout(() => {
         setLogoutModalVisible(false);
         navigation.reset({
           index: 0,
           routes: [{ name: 'Login' }],
         });
-      }, 2000); // Modal will disappear after 2 seconds
+      }, 1000); 
     } catch (error) {
       console.error('Error during logout:', error);
       Alert.alert('Error', 'Ocurrió un error al cerrar sesión. Inténtelo de nuevo.');
@@ -130,7 +129,7 @@ const LoginScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      {/* Login Modal */}
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -139,24 +138,12 @@ const LoginScreen = ({ navigation }) => {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalText}>Sesión iniciada correctamente</Text>
+            <Text style={styles.modalText}>Sesión iniciada exitosamente</Text>
+            <Ionicons name="checkmark-circle-outline" size={60} color="#4CAF50" style={styles.modalIcon} />
           </View>
         </View>
       </Modal>
 
-      {/* Logout Modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={logoutModalVisible}
-        onRequestClose={() => setLogoutModalVisible(false)}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalText}>Sesión cerrada exitosamente</Text>
-          </View>
-        </View>
-      </Modal>
     </ScrollView>
   );
 };
@@ -256,6 +243,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b1b1b',
     borderRadius: 10,
     alignItems: 'center',
+  },
+  modalIcon: {
+    marginBottom: 10,
+    marginTop: 10
   },
   modalText: {
     fontSize: 18,
