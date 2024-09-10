@@ -1,10 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Nav from '../components/nav'
-import Footer from '../components/footer'
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+import Nav from '../components/nav';
+import Footer from '../components/footer';
 
-export default function Inicio({ navigation }) {
+export default function Inicio() {
+  const [userName, setUserName] = useState('Usuario');
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const loadUserName = async () => {
+      try {
+        const storedUserName = await AsyncStorage.getItem('userName');
+        if (storedUserName) {
+          setUserName(storedUserName);
+        }
+      } catch (error) {
+        console.error('Error loading username:', error);
+      }
+    };
+
+    loadUserName();
+  }, []);
+
   const handlePressServicios = () => {
     navigation.navigate('Servicios');
   };
@@ -22,7 +42,7 @@ export default function Inicio({ navigation }) {
       <Nav />
       <StatusBar style="auto" translucent={true} />
       <View style={styles.contenedorBienvenida}>
-        <Text style={styles.textoBievenida}>¡Hola Juan cruz!</Text>
+        <Text style={styles.textoBienvenida}>¡Hola {userName}!</Text>
       </View>
       <View style={styles.contenedorServiciosHome}>
         <TouchableOpacity onPress={handlePressServicios}>
@@ -65,18 +85,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#121212',
     padding: 40,
-    marginTop: 60
+    marginTop: 60,
   },
 
-  textoBievenida: {
+  textoBienvenida: {
     fontSize: 20,
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 
   contenedorServiciosHome: {
     flexDirection: 'row',
-    margin: 60
+    margin: 60,
   },
 
   cajaServicios: {
@@ -86,31 +106,32 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 20,
     margin: 10,
-    width: 160
-  },
-
-  botonAgregarDispositivo: {
-    backgroundColor: '#C75F00',
-    padding: 15, 
-    marginTop: 20,
-    borderRadius: 20,
-    alignSelf: 'center'
-  },
-
-  textoDispositivo: {
-    color: '#fff',
-    fontWeight: 'bold'
-  },
-
-  imagenServicio: {
-    width: 80,
-    height: 80,
-    resizeMode: 'contain',
+    marginTop: 40,
   },
 
   textoServicioHome: {
     color: 'white',
-    fontWeight: 'semibold',
-    marginBottom: 10
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+
+  imagenServicio: {
+    width: 60,
+    height: 60,
+  },
+
+  botonAgregarDispositivo: {
+    backgroundColor: '#C75F00',
+    padding: 15,
+    paddingHorizontal: 40,
+    borderRadius: 20,
+    marginTop: 80,
+  },
+
+  textoDispositivo: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
