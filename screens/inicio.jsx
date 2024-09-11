@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Nav from '../components/nav';
-import Footer from '../components/footer';
 import BotonAgregarDispositivo from '../components/inicio/components/BotonAgregarDispositivo.jsx';
 import CajaServicios from '../components/inicio/components/CajaServicios.jsx';
 import ContenedorBienvenida from '../components/inicio/components/ContenedorBienvenida.jsx';
@@ -34,7 +33,6 @@ export default function Inicio() {
         />
       </View>
       <BotonAgregarDispositivo onPress={handlePressAgregarDispositivo} />
-      <Footer />
     </View>
   );
 }
