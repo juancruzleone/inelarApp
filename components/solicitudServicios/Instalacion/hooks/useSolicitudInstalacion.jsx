@@ -16,6 +16,7 @@ export const useSolicitudInstalacion = () => {
   const [formErrors, setFormErrors] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [datePickerMode, setDatePickerMode] = useState('calendar');
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -49,6 +50,17 @@ export const useSolicitudInstalacion = () => {
     });
   };
 
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || formData.fecha;
+    setShowDatePicker(false);
+    setFormData({ ...formData, fecha: currentDate });
+  };
+
+  const handleDatePress = (mode) => {
+    setShowDatePicker(true);
+    setDatePickerMode(mode);
+  };
+
   return {
     formData,
     setFormData,
@@ -58,7 +70,10 @@ export const useSolicitudInstalacion = () => {
     setModalVisible,
     showDatePicker,
     setShowDatePicker,
+    datePickerMode,
     handleSolicitud,
     resetForm,
+    handleDateChange,
+    handleDatePress,
   };
 };

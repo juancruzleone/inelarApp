@@ -1,8 +1,62 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import RNPickerSelect from 'react-native-picker-select';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function FormularioInstalacion({ formData, setFormData, formErrors, products, showDatePicker, handleDateChange, setShowDatePicker, handleSolicitud }) {
+export default function FormularioInstalacion({
+  formData,
+  setFormData,
+  formErrors,
+  products,
+  handleDateChange,
+  handleSolicitud,
+}) {
+  const [showPicker, setShowPicker] = useState(false);
+
+  const handleDatePress = () => {
+    setShowPicker(true);
+  };
+
+  const renderDatePicker = () => {
+    const dateValue = formData.fecha ? new Date(formData.fecha) : new Date();
+
+    return (
+      <View style={styles.dateInputContainer}>
+        <TouchableOpacity
+          onPress={handleDatePress}
+          style={styles.dateTextContainer}
+        >
+          <Text style={styles.dateText}>
+            {dateValue.toISOString().split('T')[0]}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={handleDatePress}
+          style={styles.dateIconContainer}
+        >
+          <Ionicons name="calendar-outline" size={24} color="black" />
+        </TouchableOpacity>
+
+        {showPicker && (
+          <DateTimePicker
+            value={dateValue}
+            mode="date"
+            display="calendar"
+            onChange={(event, selectedDate) => {
+              setShowPicker(false);
+              if (selectedDate) {
+                handleDateChange(event, selectedDate);
+              }
+            }}
+            style={styles.datePicker}
+          />
+        )}
+      </View>
+    );
+  };
+
   return (
     <View style={styles.contenido}>
       <Text style={styles.titulo}>Solicitud de Instalación</Text>
@@ -36,18 +90,14 @@ export default function FormularioInstalacion({ formData, setFormData, formError
       {formErrors.direccion && <Text style={styles.error}>{formErrors.direccion}</Text>}
 
       <Text style={styles.label}>Dispositivo</Text>
-      {/*
-      <Picker
-        selectedValue={formData.dispositivo}
-        style={styles.input}
-        onValueChange={value => setFormData({ ...formData, dispositivo: value })}
-      >
-        <Picker.Item label="Selecciona un dispositivo" value="" />
-        {products.map(product => (
-          <Picker.Item key={product.id} label={product.name} value={product.name} />
-        ))}
-      </Picker>
-      */}
+      <View style={styles.pickerContainer}>
+        <RNPickerSelect
+          onValueChange={value => setFormData({ ...formData, dispositivo: value })}
+          items={products.map(product => ({ label: product.name, value: product.name }))}
+          placeholder={{ label: 'Selecciona un dispositivo', value: null }}
+          style={pickerSelectStyles}
+        />
+      </View>
       {formErrors.dispositivo && <Text style={styles.error}>{formErrors.dispositivo}</Text>}
 
       <Text style={styles.label}>Cantidad</Text>
@@ -61,28 +111,10 @@ export default function FormularioInstalacion({ formData, setFormData, formError
       {formErrors.cantidad && <Text style={styles.error}>{formErrors.cantidad}</Text>}
 
       <Text style={styles.label}>Fecha deseada</Text>
-      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-        <TextInput
-          style={styles.input}
-          placeholder="Selecciona una fecha"
-          value={formData.fecha.toISOString().split('T')[0]}
-          editable={false}
-        />
-      </TouchableOpacity>
-      {showDatePicker && (
-        <DateTimePicker
-          value={formData.fecha}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
+      {renderDatePicker()}
       {formErrors.fecha && <Text style={styles.error}>{formErrors.fecha}</Text>}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleSolicitud}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleSolicitud}>
         <Text style={styles.buttonText}>Solicitar Instalación</Text>
       </TouchableOpacity>
     </View>
@@ -92,34 +124,76 @@ export default function FormularioInstalacion({ formData, setFormData, formError
 const styles = StyleSheet.create({
   contenido: {
     alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 20,
   },
   titulo: {
     fontSize: 24,
     color: 'white',
     marginBottom: 40,
-    marginTop: 60
+    marginTop: 20,
   },
   label: {
     fontSize: 16,
     color: 'white',
     marginBottom: 5,
     alignSelf: 'flex-start',
+    width: '100%',
   },
   input: {
     backgroundColor: 'white',
-    padding: 8,
+    padding: 10,
     borderRadius: 10,
     marginBottom: 15,
-    width: 340,
-    height: 40
+    width: '100%',
+    height: 40,
+  },
+  pickerContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginBottom: 15,
+    width: '100%',
+    height: 40,
+    justifyContent: 'center',
+  },
+  dateInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginBottom: 15,
+    width: '100%',
+    height: 40,
+    position: 'relative', // Añadido para posicionar el icono
+  },
+  dateTextContainer: {
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+  },
+  dateText: {
+    paddingLeft: 10,
+    color: 'black',
+  },
+  dateIconContainer: {
+    position: 'absolute', // Cambiado a absolute
+    right: 10, // Ajusta la posición a la derecha
+    top: -2, // Ajusta la posición verticalmente
+    padding: 10,
+  },
+  datePicker: {
+    width: '40%',
+    marginRight: 5,
+    backgroundColor: 'white',
   },
   button: {
     backgroundColor: '#f57600',
     padding: 12,
     borderRadius: 25,
     alignItems: 'center',
-    width: 200,
+    width: '60%',
     marginTop: 20,
+    marginBottom: 40,
   },
   buttonText: {
     color: 'white',
@@ -129,5 +203,19 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     marginBottom: 10,
+    alignSelf: 'flex-start',
   },
 });
+
+const pickerSelectStyles = {
+  inputIOS: {
+    padding: 10,
+    borderRadius: 10,
+    color: 'black',
+  },
+  inputAndroid: {
+    padding: 10,
+    borderRadius: 10,
+    color: 'black',
+  },
+};
