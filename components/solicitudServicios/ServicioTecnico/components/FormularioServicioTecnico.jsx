@@ -125,7 +125,7 @@ export default function FormularioServicioTecnico({
       <TextInput
         style={styles.input}
         placeholder="Escribe la cantidad"
-        value={formData.cantidad}
+        value={formData.cantidad.toString()}
         onChangeText={text => setFormData({ ...formData, cantidad: text })}
         keyboardType="numeric"
       />

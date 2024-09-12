@@ -1,4 +1,3 @@
-// useSolicitudServicioTecnico.jsx
 import { useState, useEffect } from 'react';
 import { validateField } from '../../../../components/solicitudServicios/ServicioTecnico/utils/Validaciones.jsx';
 import { fetchProducts, submitRequest } from '../../../../components/solicitudServicios/ServicioTecnico/services/FetchSolicitudServicioTecnico.jsx';
@@ -10,7 +9,7 @@ export const useSolicitudServicioTecnico = () => {
     telefono: "",
     direccion: "",
     problema: "",
-    fecha: "",
+    fecha: new Date().toISOString().split('T')[0],
     dispositivo: "",
     cantidad: 1,
     category: "técnico", 
@@ -47,24 +46,16 @@ export const useSolicitudServicioTecnico = () => {
     loadProducts();
   }, []);
 
-  const handleChange = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    const error = validateField(name, value);
-    setFormErrors((prev) => ({ ...prev, [name]: error }));
-  };
-
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || formData.fecha;
-    setFormData((prev) => ({ ...prev, fecha: currentDate }));
+    setFormData((prev) => ({ 
+      ...prev, 
+      fecha: currentDate.toISOString().split('T')[0] 
+    }));
   };
 
   const handleSolicitud = async () => {
-    // Validate all fields
-    const errors = {};
-    Object.keys(formData).forEach((field) => {
-      errors[field] = validateField(field, formData[field]);
-    });
-
+    const errors = validateField(formData);
     setFormErrors(errors);
 
     if (Object.values(errors).some((error) => error)) {
@@ -83,7 +74,7 @@ export const useSolicitudServicioTecnico = () => {
           telefono: "",
           direccion: "",
           problema: "",
-          fecha: "",
+          fecha: new Date().toISOString().split('T')[0],
           dispositivo: "",
           cantidad: 1,
           category: "tecnico",
@@ -102,7 +93,6 @@ export const useSolicitudServicioTecnico = () => {
     formData,
     setFormData,
     formErrors,
-    handleChange,
     handleSolicitud,
     products,
     modalVisible,
