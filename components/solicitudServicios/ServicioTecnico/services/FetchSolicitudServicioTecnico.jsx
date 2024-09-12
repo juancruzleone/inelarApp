@@ -18,7 +18,7 @@ export const submitRequest = async (formData) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...formData,
-        fecha: formData.fecha, // Esto ya está en el formato correcto
+        fecha: formData.fecha, 
         category: 'técnico',
       }),
     });

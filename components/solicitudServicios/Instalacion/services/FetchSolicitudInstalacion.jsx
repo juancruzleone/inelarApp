@@ -18,7 +18,7 @@ export const submitSolicitud = async (formData) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...formData,
-        fecha: formData.fecha, // Remove .toISOString().split('T')[0] as it's already in the correct format
+        fecha: formData.fecha, 
         category: 'instalaciones',
       }),
     });

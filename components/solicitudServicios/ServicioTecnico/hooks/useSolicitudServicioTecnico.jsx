@@ -59,7 +59,7 @@ export const useSolicitudServicioTecnico = () => {
     setFormErrors(errors);
 
     if (Object.values(errors).some((error) => error)) {
-      return; // Stop submission if there are errors
+      return; 
     }
 
     try {
@@ -67,7 +67,6 @@ export const useSolicitudServicioTecnico = () => {
       if (response.success) {
         setModalVisible(true);
         setTimeout(() => setModalVisible(false), 3000);
-        // Reset form after successful submission
         setFormData({
           nombre: "",
           email: "",
@@ -77,7 +76,7 @@ export const useSolicitudServicioTecnico = () => {
           fecha: new Date().toISOString().split('T')[0],
           dispositivo: "",
           cantidad: 1,
-          category: "tecnico",
+          category: "servicio técnico",
         });
       }
     } catch (err) {

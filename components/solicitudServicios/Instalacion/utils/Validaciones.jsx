@@ -44,7 +44,7 @@ export const validateForm = (formData) => {
   if (!formData.fecha) {
     errors.fecha = 'La fecha es requerida.';
   } else {
-    const selectedDate = new Date(formData.fecha).setHours(0, 0, 0, 0); // Fecha seleccionada sin horas, minutos y segundos
+    const selectedDate = new Date(formData.fecha).setHours(0, 0, 0, 0); 
     if (selectedDate < currentDate) {
       errors.fecha = 'No puedes seleccionar una fecha anterior a la actual.';
     }
