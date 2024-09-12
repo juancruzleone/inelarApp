@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
@@ -69,6 +69,16 @@ export default function FormularioInstalacion({
         onChangeText={text => setFormData({ ...formData, nombre: text })}
       />
       {formErrors.nombre && <Text style={styles.error}>{formErrors.nombre}</Text>}
+
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe tu email"
+        value={formData.email}
+        onChangeText={text => setFormData({ ...formData, email: text })}
+        keyboardType="email-address"
+      />
+      {formErrors.email && <Text style={styles.error}>{formErrors.email}</Text>}
 
       <Text style={styles.label}>Teléfono</Text>
       <TextInput
@@ -164,7 +174,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: '100%',
     height: 40,
-    position: 'relative', // Añadido para posicionar el icono
   },
   dateTextContainer: {
     flex: 1,
@@ -176,9 +185,9 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dateIconContainer: {
-    position: 'absolute', // Cambiado a absolute
-    right: 10, // Ajusta la posición a la derecha
-    top: -2, // Ajusta la posición verticalmente
+    position: 'absolute',
+    right: 10,
+    top: -2,
     padding: 10,
   },
   datePicker: {

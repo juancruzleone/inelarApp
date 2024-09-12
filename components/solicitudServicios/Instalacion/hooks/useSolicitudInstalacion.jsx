@@ -1,79 +1,66 @@
 import { useState, useEffect } from 'react';
 import { fetchProducts, submitSolicitud } from '../../../../components/solicitudServicios/Instalacion/services/FetchSolicitudInstalacion.jsx';
-import { validateForm } from '../utils/Validaciones';
+import { validateForm } from '../../../../components/solicitudServicios/Instalacion/utils/Validaciones.jsx';
 
 export const useSolicitudInstalacion = () => {
   const [formData, setFormData] = useState({
     nombre: '',
+    email: '',
     telefono: '',
     direccion: '',
     dispositivo: '',
     cantidad: '',
-    fecha: new Date(),
+    fecha: new Date().toISOString().split('T')[0], // Initialize with current date
   });
 
-  const [products, setProducts] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [datePickerMode, setDatePickerMode] = useState('calendar');
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const loadProducts = async () => {
-      const products = await fetchProducts();
-      setProducts(products);
-    };
+    async function loadProducts() {
+      const productsData = await fetchProducts();
+      setProducts(productsData);
+    }
+
     loadProducts();
   }, []);
 
-  const handleSolicitud = async () => {
-    const errors = validateForm(formData);
-    setFormErrors(errors);
-
-    if (Object.keys(errors).length === 0) {
-      const success = await submitSolicitud(formData);
-      if (success) {
-        setModalVisible(true);
-        resetForm();
-      }
+  const handleDateChange = (event, selectedDate) => {
+    if (selectedDate) {
+      setFormData({ ...formData, fecha: selectedDate.toISOString().split('T')[0] });
     }
   };
 
-  const resetForm = () => {
-    setFormData({
-      nombre: '',
-      telefono: '',
-      direccion: '',
-      dispositivo: '',
-      cantidad: '',
-      fecha: new Date(),
-    });
-  };
-
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || formData.fecha;
-    setShowDatePicker(false);
-    setFormData({ ...formData, fecha: currentDate });
-  };
-
-  const handleDatePress = (mode) => {
-    setShowDatePicker(true);
-    setDatePickerMode(mode);
+  const handleSolicitud = async () => {
+    const errors = validateForm(formData);
+    if (Object.keys(errors).length === 0) {
+      const response = await submitSolicitud(formData);
+      if (response.success) {
+        setModalVisible(true);
+        setFormData({
+          nombre: '',
+          email: '',
+          telefono: '',
+          direccion: '',
+          dispositivo: '',
+          cantidad: '',
+          fecha: new Date().toISOString().split('T')[0],
+        });
+      }
+    } else {
+      setFormErrors(errors);
+    }
   };
 
   return {
     formData,
     setFormData,
-    products,
     formErrors,
     modalVisible,
     setModalVisible,
-    showDatePicker,
-    setShowDatePicker,
-    datePickerMode,
+    products,
     handleSolicitud,
-    resetForm,
     handleDateChange,
-    handleDatePress,
   };
 };

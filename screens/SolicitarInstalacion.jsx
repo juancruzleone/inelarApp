@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StatusBar, StyleSheet, ScrollView } from 'react-native';
+import { View, StatusBar, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import Nav from '../components/nav.jsx'; 
 import Footer from '../components/footer';
 import FormularioInstalacion from '../components/solicitudServicios/Instalacion/components/FormularioInstalacion.jsx';
@@ -22,7 +22,7 @@ export default function SolicitarInstalacion() {
   } = useSolicitudInstalacion();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" />
       <Nav />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -35,7 +35,7 @@ export default function SolicitarInstalacion() {
           datePickerMode={datePickerMode}
           handleDateChange={handleDateChange}
           handleDatePress={handleDatePress}
-          handleSolicitud={handleSolicitud} // Se pasa la función handleSolicitud aquí
+          handleSolicitud={handleSolicitud}
         />
       </ScrollView>
       <ModalExito
@@ -43,16 +43,18 @@ export default function SolicitarInstalacion() {
         setModalVisible={setModalVisible}
       />
       <Footer />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#333',
   },
   scrollContainer: {
+    flexGrow: 1,
     alignItems: 'center',
+    paddingBottom: 20, 
   },
 });
