@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ModalExito({ modalVisible, setModalVisible }) {
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => setModalVisible(false)}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
+      <View style={styles.modalBackground}>
+        <View style={styles.modalContainer}>
           <Text style={styles.modalText}>Solicitud enviada con éxito</Text>
+          <Ionicons name="checkmark-circle-outline" size={60} color="#4CAF50" style={styles.modalIcon} />
           <TouchableOpacity
             style={styles.modalButton}
             onPress={() => setModalVisible(false)}
@@ -25,25 +27,30 @@ export default function ModalExito({ modalVisible, setModalVisible }) {
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modalBackground: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
+  modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#1b1b1b',
     borderRadius: 10,
     alignItems: 'center',
   },
+  modalIcon: {
+    marginBottom: 10,
+    marginTop: 10,
+  },
   modalText: {
     fontSize: 18,
-    marginBottom: 15,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   modalButton: {
-    backgroundColor: '#f57600',
+    backgroundColor: '#121212',
     padding: 10,
     borderRadius: 10,
   },

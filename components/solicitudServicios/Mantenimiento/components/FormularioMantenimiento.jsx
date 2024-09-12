@@ -149,12 +149,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     alignSelf: 'flex-start',
     width: '100%',
+    marginTop: 10
   },
   input: {
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 10,
-    marginBottom: 15,
+    marginBottom: 0,
     width: '100%',
     height: 40,
   },
