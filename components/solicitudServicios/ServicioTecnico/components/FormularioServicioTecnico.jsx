@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,10 +14,6 @@ export default function FormularioServicioTecnico({
 }) {
   const [showPicker, setShowPicker] = useState(false);
 
-  const handleInputChange = (name, value) => {
-    setFormData({ ...formData, [name]: value });
-  };
-
   const handleDatePress = () => {
     setShowPicker(true);
   };
@@ -27,11 +23,19 @@ export default function FormularioServicioTecnico({
 
     return (
       <View style={styles.dateInputContainer}>
-        <TouchableOpacity onPress={handleDatePress} style={styles.dateTextContainer}>
-          <Text style={styles.dateText}>{dateValue.toISOString().split('T')[0]}</Text>
+        <TouchableOpacity
+          onPress={handleDatePress}
+          style={styles.dateTextContainer}
+        >
+          <Text style={styles.dateText}>
+            {dateValue.toISOString().split('T')[0]}
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleDatePress} style={styles.dateIconContainer}>
+        <TouchableOpacity
+          onPress={handleDatePress}
+          style={styles.dateIconContainer}
+        >
           <Ionicons name="calendar-outline" size={24} color="black" />
         </TouchableOpacity>
 
@@ -54,96 +58,91 @@ export default function FormularioServicioTecnico({
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.contenido}>
-        <Text style={styles.titulo}>Solicitar servicio técnico</Text>
+    <View style={styles.contenido}>
+      <Text style={styles.titulo}>Solicitar servicio técnico</Text>
 
-        <Text style={styles.label}>Nombre</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe tu nombre"
-          value={formData.nombre}
-          onChangeText={(text) => handleInputChange('nombre', text)}
+      <Text style={styles.label}>Nombre</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe tu nombre"
+        value={formData.nombre}
+        onChangeText={text => setFormData({ ...formData, nombre: text })}
+      />
+      {formErrors.nombre && <Text style={styles.error}>{formErrors.nombre}</Text>}
+
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe tu email"
+        value={formData.email}
+        onChangeText={text => setFormData({ ...formData, email: text })}
+        keyboardType="email-address"
+      />
+      {formErrors.email && <Text style={styles.error}>{formErrors.email}</Text>}
+
+      <Text style={styles.label}>Teléfono</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe tu teléfono"
+        value={formData.telefono}
+        onChangeText={text => setFormData({ ...formData, telefono: text })}
+        keyboardType="numeric"
+      />
+      {formErrors.telefono && <Text style={styles.error}>{formErrors.telefono}</Text>}
+
+      <Text style={styles.label}>Dirección</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe tu dirección"
+        value={formData.direccion}
+        onChangeText={text => setFormData({ ...formData, direccion: text })}
+      />
+      {formErrors.direccion && <Text style={styles.error}>{formErrors.direccion}</Text>}
+
+      <Text style={styles.label}>Problema</Text>
+      <TextInput
+        style={[styles.input, styles.textArea]}
+        placeholder="Describe el problema"
+        value={formData.problema}
+        onChangeText={text => setFormData({ ...formData, problema: text })}
+        multiline={true}
+        numberOfLines={4}
+      />
+      {formErrors.problema && <Text style={styles.error}>{formErrors.problema}</Text>}
+
+      <Text style={styles.label}>Dispositivo</Text>
+      <View style={styles.pickerContainer}>
+        <RNPickerSelect
+          onValueChange={value => setFormData({ ...formData, dispositivo: value })}
+          items={products.map(product => ({ label: product.name, value: product.name }))}
+          placeholder={{ label: 'Selecciona un dispositivo', value: null }}
+          style={pickerSelectStyles}
         />
-        {formErrors.nombre && <Text style={styles.error}>{formErrors.nombre}</Text>}
-
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe tu email"
-          value={formData.email}
-          onChangeText={(text) => handleInputChange('email', text)}
-          keyboardType="email-address"
-        />
-        {formErrors.email && <Text style={styles.error}>{formErrors.email}</Text>}
-
-        <Text style={styles.label}>Teléfono</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe tu teléfono"
-          value={formData.telefono}
-          onChangeText={(text) => handleInputChange('telefono', text)}
-          keyboardType="numeric"
-        />
-        {formErrors.telefono && <Text style={styles.error}>{formErrors.telefono}</Text>}
-
-        <Text style={styles.label}>Dirección</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe tu dirección"
-          value={formData.direccion}
-          onChangeText={(text) => handleInputChange('direccion', text)}
-        />
-        {formErrors.direccion && <Text style={styles.error}>{formErrors.direccion}</Text>}
-
-        <Text style={styles.label}>Problema</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Describe el problema"
-          value={formData.problema}
-          onChangeText={(text) => handleInputChange('problema', text)}
-          multiline={true}
-          numberOfLines={4}
-        />
-        {formErrors.problema && <Text style={styles.error}>{formErrors.problema}</Text>}
-
-        <Text style={styles.label}>Dispositivo</Text>
-        <View style={styles.pickerContainer}>
-          <RNPickerSelect
-            onValueChange={value => setFormData({ ...formData, dispositivo: value })}
-            items={products.map(product => ({ label: product.name, value: product.name }))}
-            placeholder={{ label: 'Selecciona un dispositivo', value: null }}
-            style={pickerSelectStyles}
-          />
-        </View>
-        {formErrors.dispositivo && <Text style={styles.error}>{formErrors.dispositivo}</Text>}
-
-        <Text style={styles.label}>Cantidad</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe la cantidad"
-          value={formData.cantidad}
-          onChangeText={(text) => handleInputChange('cantidad', text)}
-          keyboardType="numeric"
-        />
-        {formErrors.cantidad && <Text style={styles.error}>{formErrors.cantidad}</Text>}
-
-        <Text style={styles.label}>Fecha deseada</Text>
-        {renderDatePicker()}
-        {formErrors.fecha && <Text style={styles.error}>{formErrors.fecha}</Text>}
-
-        <TouchableOpacity style={styles.button} onPress={handleSolicitud}>
-          <Text style={styles.buttonText}>Enviar solicitud</Text>
-        </TouchableOpacity>
       </View>
-    </ScrollView>
+      {formErrors.dispositivo && <Text style={styles.error}>{formErrors.dispositivo}</Text>}
+
+      <Text style={styles.label}>Cantidad</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe la cantidad"
+        value={formData.cantidad}
+        onChangeText={text => setFormData({ ...formData, cantidad: text })}
+        keyboardType="numeric"
+      />
+      {formErrors.cantidad && <Text style={styles.error}>{formErrors.cantidad}</Text>}
+
+      <Text style={styles.label}>Fecha deseada</Text>
+      {renderDatePicker()}
+      {formErrors.fecha && <Text style={styles.error}>{formErrors.fecha}</Text>}
+
+      <TouchableOpacity style={styles.button} onPress={handleSolicitud}>
+        <Text style={styles.buttonText}>Enviar solicitud</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   contenido: {
     alignItems: 'center',
     width: '100%',

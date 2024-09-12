@@ -24,7 +24,9 @@ export default function SolicitarInstalacion() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" />
-      <Nav />
+      <View style={styles.navContainer}>
+        <Nav />
+      </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <FormularioInstalacion
           formData={formData}
@@ -52,9 +54,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#333',
   },
+  navContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1, 
+  },
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
-    paddingBottom: 20, 
+    paddingTop: 100, 
+    paddingBottom: 20,
   },
 });
