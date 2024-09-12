@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function FormularioInstalacion({
+export default function FormularioProvision({
   formData,
   setFormData,
   formErrors,
@@ -59,7 +59,7 @@ export default function FormularioInstalacion({
 
   return (
     <View style={styles.contenido}>
-      <Text style={styles.titulo}>Solicitar instalación</Text>
+      <Text style={styles.titulo}>Solicitar provision</Text>
 
       <Text style={styles.label}>Nombre</Text>
       <TextInput
@@ -125,7 +125,7 @@ export default function FormularioInstalacion({
       {formErrors.fecha && <Text style={styles.error}>{formErrors.fecha}</Text>}
 
       <TouchableOpacity style={styles.button} onPress={handleSolicitud}>
-        <Text style={styles.buttonText}>Solicitar solicitud</Text>
+        <Text style={styles.buttonText}>Enviar solicitud</Text>
       </TouchableOpacity>
     </View>
   );
