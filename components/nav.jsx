@@ -3,12 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, Image, 
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Nav = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [logoutModalVisible, setLogoutModalVisible] = useState(false); 
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scannedData, setScannedData] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanResultModalVisible, setScanResultModalVisible] = useState(false);
   const menuWidth = Dimensions.get('window').width - 100;
   const menuTranslateX = new Animated.Value(-menuWidth);
   const navigation = useNavigation();
@@ -19,6 +23,13 @@ const Nav = () => {
       useNativeDriver: true,
     }).start();
   }, [showMenu]);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
   const handleMenuPress = () => {
     setShowMenu(!showMenu);
@@ -33,16 +44,23 @@ const Nav = () => {
     navigation.navigate(screen);
   };
 
-  const handleScanPress = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status === 'granted') {
-      const result = await ImagePicker.launchCameraAsync();
-      if (!result.cancelled) {
-        Alert.alert('Photo taken!', 'You have taken a photo.');
-      }
-    } else {
-      Alert.alert('Permission denied', 'Camera permission is required to use this feature.');
+  const handleScanPress = () => {
+    if (hasPermission === null) {
+      return;
     }
+
+    if (hasPermission === false) {
+      Alert.alert('No access to camera', 'Please grant camera permission to use this feature.');
+      return;
+    }
+
+    setIsScanning(true);
+  };
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScannedData(data);
+    setScanResultModalVisible(true);
+    setIsScanning(false);
   };
 
   const handleLogout = async () => {
@@ -51,15 +69,13 @@ const Nav = () => {
       closeMenu();
       setLogoutModalVisible(true);
 
-     
       setTimeout(() => {
         setLogoutModalVisible(false);
         navigation.reset({
           index: 0,
           routes: [{ name: 'Login' }],
         });
-      }, 1500); 
-
+      }, 1500);
     } catch (error) {
       console.error('Error during logout:', error);
       Alert.alert('Error', 'An error occurred while logging out. Please try again.');
@@ -112,17 +128,44 @@ const Nav = () => {
         </Animated.View>
       )}
 
+      <ModalExito modalVisible={logoutModalVisible} setModalVisible={setLogoutModalVisible} />
+
       <Modal
-        visible={logoutModalVisible}
-        transparent={true}
         animationType="fade"
-        onRequestClose={() => setLogoutModalVisible(false)}
+        transparent={true}
+        visible={scanResultModalVisible}
+        onRequestClose={() => setScanResultModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Sesión cerrada exitosamente</Text>
-            <Ionicons name="checkmark-circle-outline" size={60} color="#4CAF50" style={styles.modalIcon} />
+        <View style={styles.modalBackground}>
+          <View style={[styles.modalContainer, styles.scanResultModalContainer]}>
+            <Text style={styles.modalTitle}>Código QR escaneado</Text>
+            <Text style={styles.modalData}>{scannedData}</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setScanResultModalVisible(false)}
+            >
+              <Text style={styles.modalButtonText}>Cerrar</Text>
+            </TouchableOpacity>
           </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={isScanning}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setIsScanning(false)}
+      >
+        <View style={styles.scannerContainer}>
+          {hasPermission && (
+            <BarCodeScanner
+              onBarCodeScanned={handleBarCodeScanned}
+              style={StyleSheet.absoluteFillObject}
+            />
+          )}
+          <TouchableOpacity style={styles.closeScannerButton} onPress={() => setIsScanning(false)}>
+            <Text style={styles.closeScannerText}>Cerrar Escáner</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -209,43 +252,84 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  modalContainer: {
+  modalBackground: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
+  modalContainer: {
+    width: 300,
+    padding: 20,
     backgroundColor: '#1b1b1b',
     borderRadius: 10,
-    padding: 20,
     alignItems: 'center',
-    width: '80%',
   },
-  modalText: {
-    fontSize: 18,
+  scanResultModalContainer: {
+    height: 200, // Altura fija para el modal
+  },
+  modalTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'white',
-  },
-  modalIcon: {
+    color: '#fff',
     marginBottom: 10,
-    marginTop: 10,
   },
-  /*
+  modalData: {
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 20,
+  },
   modalButton: {
-    backgroundColor: '#C75F00',
-    borderRadius: 10,
+    backgroundColor: '#121212',
     padding: 10,
-    width: '100%',
-    alignItems: 'center',
+    borderRadius: 10,
   },
   modalButtonText: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  scannerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  closeScannerButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    backgroundColor: '#C75F00',
+    padding: 10,
+    borderRadius: 10,
+  },
+  closeScannerText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  */
 });
+
+const ModalExito = ({ modalVisible, setModalVisible }) => {
+  return (
+    <Modal
+      visible={modalVisible}
+      animationType="fade"
+      transparent={true}
+      onRequestClose={() => setModalVisible(false)}
+    >
+      <View style={styles.modalBackground}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>¡Cierre de sesión exitoso!</Text>
+          <TouchableOpacity
+            style={styles.modalButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <Text style={styles.modalButtonText}>Cerrar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+};
 
 export default Nav;

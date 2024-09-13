@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import PantallaCarga from './screens/PantallaCarga';
+import PantallaCarga from './screens/pantallacarga';
 import Login from './screens/login';
-import Inicio from './screens/Inicio';
+import Inicio from './screens/inicio';
 import Capacitaciones from './screens/capacitaciones';
 import Servicios from './screens/Servicios';
 import SolicitudInstalacion from './screens/SolicitarInstalacion';

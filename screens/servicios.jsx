@@ -2,11 +2,12 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Nav from '../components/nav';
-import Footer from '../components/footer';
+import Nav from '../components/nav.jsx';
+import Footer from '../components/footer.jsx';
 import ItemsServicios from '../components/servicios/components/ItemsServicios.jsx';
-import { useBuscarServicio } from '../components/servicios/hooks/useBuscarServicio'; 
+import { useBuscarServicio } from '../components/servicios/hooks/useBuscarServicio.jsx'; 
 import { serviciosData } from '../components/servicios/components/ListaServicios.jsx'; 
+
 export default function Servicios() {
   const navigation = useNavigation();
   
