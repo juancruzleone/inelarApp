@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { validateLoginFields } from "../utils/Validaciones.jsx"; // Asegúrate de que esté entre llaves
+import { validateLoginFields } from "../utils/Validaciones.jsx"; 
 import { loginUser } from '../services/FetchLogin.jsx'; 
 
 export const useLogin = (navigation) => {

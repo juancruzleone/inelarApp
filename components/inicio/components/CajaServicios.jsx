@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 20,
     margin: 10,
-    marginTop: 40,
     alignItems: 'center',
     flexBasis: 150,
   },
@@ -28,7 +27,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 15,
   },
   imagen: {
     width: 60,

@@ -1,10 +1,10 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function BotonAgregarDispositivo({ onPress }) {
+export default function BotonAgregarInstalacion({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.boton}>
-      <Text style={styles.texto}>Agregar nuevo dispositivo</Text>
+      <Text style={styles.texto}>Agregar nueva instalación</Text>
     </TouchableOpacity>
   );
 }
@@ -12,10 +12,10 @@ export default function BotonAgregarDispositivo({ onPress }) {
 const styles = StyleSheet.create({
   boton: {
     backgroundColor: '#C75F00',
-    padding: 15,
+    padding: 10,
     paddingHorizontal: 40,
     borderRadius: 20,
-    marginTop: 80,
+    marginTop: 60,
   },
   texto: {
     color: 'white',

@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@alessiocancian/react-native-actionsheet": "^3.2.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-picker/picker": "2.7.5",
@@ -16,6 +17,7 @@
     "@react-navigation/native-stack": "^6.9.17",
     "@react-navigation/stack": "^6.3.20",
     "expo": "^51.0.14",
+    "expo-barcode-scanner": "~13.0.1",
     "expo-camera": "^15.0.11",
     "expo-image-picker": "^15.0.5",
     "expo-permissions": "^14.4.0",
@@ -31,8 +33,7 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-svg-transformer": "^1.4.0",
-    "react-navigation": "^5.0.0",
-    "expo-barcode-scanner": "~13.0.1"
+    "react-navigation": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"

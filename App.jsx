@@ -10,11 +10,14 @@ import SolicitudInstalacion from './screens/SolicitarInstalacion';
 import SolicitudMantenimiento from './screens/SolicitarMantenimiento';
 import SolicitudProvision from './screens/SolicitarProvision';
 import SolicitudServiciotecnico from './screens/SolicitarServicioTecnico';
+import Instalaciones from './screens/Instalaciones'
+import InstalacionDetalle from './screens/InstalacionDetalle'; 
 import CapacitacionDetectores from './screens/CapacitacionDetectores';
 import CapacitacionExtintores from './screens/CapacitacionExtintores';
 import CapacitacionMangueras from './screens/CapacitacionMangueras';
 import CapacitacionAlarmas from './screens/CapacitacionAlarmas';
 import AgregarDispositivo from './screens/AgregarDispositivo';
+
 
 const Stack = createStackNavigator();
 
@@ -90,6 +93,16 @@ export default function App() {
         <Stack.Screen
           name="AgregarDispositivo"
           component={AgregarDispositivo}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Instalaciones"
+          component={Instalaciones}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InstalacionDetalle"
+          component={InstalacionDetalle}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

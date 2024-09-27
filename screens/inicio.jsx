@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Nav from '../components/nav';
-import BotonAgregarDispositivo from '../components/inicio/components/BotonAgregarDispositivo.jsx';
+import BotonAgregarInstalacion from '../components/inicio/components/BotonAgregarInstalacion.jsx';
 import CajaServicios from '../components/inicio/components/CajaServicios.jsx';
 import ContenedorBienvenida from '../components/inicio/components/ContenedorBienvenida.jsx';
 import { useUserName } from '../components/inicio/hooks/useUserName.jsx';
@@ -13,7 +13,8 @@ export default function Inicio() {
 
   const handlePressServicios = () => navigation.navigate('Servicios');
   const handlePressCapacitaciones = () => navigation.navigate('Capacitaciones');
-  const handlePressAgregarDispositivo = () => navigation.navigate('AgregarDispositivo');
+  const handlePressInstalaciones = () => navigation.navigate('Instalaciones');
+  const handlePressAgregarInstalacion = () => navigation.navigate('AgregarInstalacion');
 
   return (
     <View style={styles.container}>
@@ -32,7 +33,14 @@ export default function Inicio() {
           image={require('../assets/libro.png')} 
         />
       </View>
-      <BotonAgregarDispositivo onPress={handlePressAgregarDispositivo} />
+      <View style={styles.contenedorInstalaciones}>
+        <CajaServicios 
+          onPress={handlePressInstalaciones} 
+          text="Instalaciones" 
+          image={require('../assets/instalaciones.png')} 
+        />
+      </View>
+      <BotonAgregarInstalacion onPress={handlePressAgregarInstalacion} />
     </View>
   );
 }
@@ -46,6 +54,11 @@ const styles = StyleSheet.create({
   },
   contenedorServiciosHome: {
     flexDirection: 'row',
-    margin: 60,
+    margin: 35,
+    justifyContent: 'space-between',
+    width: '80%',
+  },
+  contenedorInstalaciones: {
+    alignItems: 'center',
   },
 });
