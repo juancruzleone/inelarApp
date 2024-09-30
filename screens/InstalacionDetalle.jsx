@@ -1,26 +1,86 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TextInput, StyleSheet, Image, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import * as Print from 'expo-print';
+
 import { useDevices } from '../components/InstalacionDetalle/hooks/useDevices.jsx';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';  // Importación de iconos
-import { printQR } from '../components/InstalacionDetalle/services/DeviceActions';  // Acción para imprimir dispositivos
+import ModalCrear from '../components/InstalacionDetalle/components/ModalCrear.jsx';
+import ModalEditar from '../components/InstalacionDetalle/components/ModalEditar.jsx';
+import ModalEliminar from '../components/InstalacionDetalle/components/ModalEliminar.jsx';
+import ModalExito from '../components/InstalacionDetalle/components/ModalExito.jsx';
 
-export default function InstalacionDetalles() {
+export default function InstalacionDetalle() {
   const route = useRoute();
   const { installation } = route.params;
-  const { devices, loading, error } = useDevices(installation._id);
+  const { devices, loading, error, addDevice, updateDevice, deleteDevice, refreshDevices } = useDevices(installation._id); 
   const [search, setSearch] = useState('');
   const [qrModalVisible, setQrModalVisible] = useState(false);
   const [selectedQR, setSelectedQR] = useState(null);
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const filteredDevices = devices.filter(device => 
-    device.nombre.toLowerCase().includes(search.toLowerCase())
+    device.nombre && device.nombre.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleAddDevice = () => {
-    // Acción para agregar dispositivo
+    setCreateModalVisible(true);
+  };
+
+  const handleEditDevice = (device) => {
+    setSelectedDevice(device);
+    setEditModalVisible(true);
+  };
+
+  const handleDeleteDevice = (device) => {
+    setSelectedDevice(device);
+    setDeleteModalVisible(true);
+  };
+
+  const handleCreateSubmit = async (newDevice) => {
+    const result = await addDevice(newDevice);
+    if (result.success) {
+      setSuccessMessage('Dispositivo creado exitosamente');
+      setSuccessModalVisible(true);
+      setCreateModalVisible(false);
+    } else {
+      console.error(result.error);
+    }
+  };
+
+  const handleEditSubmit = async (updatedDevice) => {
+    const result = await updateDevice(selectedDevice._id, updatedDevice);
+    if (result.success) {
+      setSuccessMessage('Dispositivo actualizado exitosamente');
+      setSuccessModalVisible(true);
+      setEditModalVisible(false);
+    } else {
+      console.error(result.error);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    const result = await deleteDevice(selectedDevice._id);
+    if (result.success) {
+      setSuccessMessage('Dispositivo eliminado exitosamente');
+      setSuccessModalVisible(true);
+      setDeleteModalVisible(false);
+    } else {
+      console.error(result.error);
+    }
+  };
+
+ 
+  const handleSuccessModalClose = () => {
+    setSuccessModalVisible(false);
+    refreshDevices(); 
   };
 
   const openQRModal = (qrCode) => {
@@ -31,6 +91,27 @@ export default function InstalacionDetalles() {
   const closeQRModal = () => {
     setQrModalVisible(false);
     setSelectedQR(null);
+  };
+
+  const handlePrintQR = async (qrCode) => {
+    try {
+      const html = `
+        <html>
+          <body>
+            <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?data=${qrCode}&size=200x200" />
+            </div>
+          </body>
+        </html>
+      `;
+      
+      await Print.printAsync({
+        html: html,
+      });
+    } catch (error) {
+      console.error('Error al imprimir:', error);
+      alert('Hubo un error al intentar imprimir el código QR.');
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -45,13 +126,12 @@ export default function InstalacionDetalles() {
             <Ionicons name="print" size={30} color="white" />
           </TouchableOpacity>
         )}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleEditDevice(item)}>
           <MaterialIcons name="edit" size={30} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleDeleteDevice(item)}>
           <MaterialIcons name="delete" size={30} color="white" />
         </TouchableOpacity>
-        {/* Botón de planilla */}
         <TouchableOpacity>
           <Ionicons name="document-text" size={30} color="white" />
         </TouchableOpacity>
@@ -77,7 +157,6 @@ export default function InstalacionDetalles() {
       <Nav />
       <Text style={styles.installationName}>{installation.company || 'Instalación sin nombre'}</Text>
 
-      {/* Buscador de dispositivos */}
       <TextInput
         style={styles.searchBar}
         placeholder="Buscar dispositivo"
@@ -86,7 +165,6 @@ export default function InstalacionDetalles() {
         onChangeText={setSearch}
       />
 
-      {/* Botón para agregar dispositivo */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddDevice}>
         <Text style={styles.addButtonText}>Agregar Dispositivo</Text>
       </TouchableOpacity>
@@ -97,26 +175,31 @@ export default function InstalacionDetalles() {
         keyExtractor={(item) => item._id.toString()}
       />
 
-      {/* Modal para mostrar e imprimir el código QR */}
-      <Modal visible={qrModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Código QR</Text>
-            {selectedQR && (
-              <Image 
-                style={styles.qrCodeImageLarge} 
-                source={{ uri: `https://api.qrserver.com/v1/create-qr-code/?data=${selectedQR}&size=200x200` }} 
-              />
-            )}
-            <TouchableOpacity onPress={() => printQR(selectedQR)}>
-              <Text style={styles.modalButton}>Imprimir Código QR</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={closeQRModal}>
-              <Text style={styles.modalButton}>Cerrar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <ModalCrear
+        isVisible={createModalVisible}
+        onClose={() => setCreateModalVisible(false)}
+        onSubmit={handleCreateSubmit}
+      />
+
+      <ModalEditar
+        isVisible={editModalVisible}
+        onClose={() => setEditModalVisible(false)}
+        onSubmit={handleEditSubmit}
+        device={selectedDevice}
+      />
+
+      <ModalEliminar
+        isVisible={deleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        onConfirm={handleDeleteConfirm}
+        deviceName={selectedDevice?.nombre}
+      />
+
+      <ModalExito
+        isOpen={successModalVisible}
+        onClose={handleSuccessModalClose} 
+        message={successMessage}
+      />
 
       <Footer />
     </View>
@@ -170,13 +253,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   deviceCategory: {
-    color: 'gray',
+    color: 'lightgray',
     fontSize: 14,
+    marginBottom: 10,
   },
   deviceActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
+  },
+  qrCodeImageLarge: {
+    width: 200,
+    height: 200,
+    marginVertical: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -187,6 +275,7 @@ const styles = StyleSheet.create({
   loadingText: {
     color: 'white',
     marginTop: 10,
+    fontSize: 16,
   },
   errorText: {
     color: 'red',
@@ -197,27 +286,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: '#1d1d1d',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
   },
   modalTitle: {
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  qrCodeImageLarge: {
-    width: 200,
-    height: 200,
     marginBottom: 20,
   },
   modalButton: {
-    color: '#4CAF50',
+    color: '#C75F00',
+    marginTop: 20,
     fontSize: 16,
-    marginTop: 10,
   },
 });

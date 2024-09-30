@@ -1,5 +1,4 @@
 import { getToken } from '../utils/Auth';
-
 const API_URL = 'https://inelarweb-back.onrender.com/api/instalaciones';
 
 export const fetchInstallations = async () => {
@@ -26,15 +25,15 @@ export const fetchInstallations = async () => {
 };
 
 
-export const updateInstallation = async (id, instalacion) => {
+export const createInstallation = async (instalacion) => {
   try {
     const token = await getToken();
     if (!token) {
       throw new Error('No se encontró el token de autenticación');
     }
 
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: 'PUT',
+    const response = await fetch(`${API_URL}`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -42,7 +41,7 @@ export const updateInstallation = async (id, instalacion) => {
       body: JSON.stringify(instalacion),
     });
     if (!response.ok) {
-      throw new Error('Error al editar la instalación');
+      throw new Error('Error al crear la instalación');
     }
     const data = await response.json();
     return data;
@@ -52,26 +51,3 @@ export const updateInstallation = async (id, instalacion) => {
   }
 };
 
-export const deleteInstallation = async (id) => {
-  try {
-    const token = await getToken();
-    if (!token) {
-      throw new Error('No se encontró el token de autenticación');
-    }
-
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      throw new Error('Error al eliminar la instalación');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return { error: error.message };
-  }
-};

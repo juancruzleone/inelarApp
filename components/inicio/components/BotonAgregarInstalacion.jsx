@@ -4,7 +4,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 export default function BotonAgregarInstalacion({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.boton}>
-      <Text style={styles.texto}>Agregar nueva instalación</Text>
+      <Text style={styles.texto}>Crear instalación</Text>
     </TouchableOpacity>
   );
 }
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   texto: {
-    color: 'white',
+    color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
   },
