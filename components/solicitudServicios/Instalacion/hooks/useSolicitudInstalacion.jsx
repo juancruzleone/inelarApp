@@ -10,7 +10,7 @@ export const useSolicitudInstalacion = () => {
     direccion: '',
     dispositivo: '',
     cantidad: '',
-    fecha: new Date().toISOString().split('T')[0], // Initialize with current date
+    fecha: new Date().toISOString().split('T')[0], 
   });
 
   const [formErrors, setFormErrors] = useState({});

@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scanResultModalContainer: {
-    height: 200, // Altura fija para el modal
+    height: 200, 
   },
   modalTitle: {
     fontSize: 20,

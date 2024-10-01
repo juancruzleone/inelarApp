@@ -13,7 +13,7 @@ export const useLogin = (navigation) => {
   const handleSubmit = async () => {
     setError('');
 
-    const validationError = validateLoginFields(username, password); // Usamos la función correctamente
+    const validationError = validateLoginFields(username, password); 
     if (validationError) {
       setError(validationError);
       return;

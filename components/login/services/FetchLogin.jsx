@@ -17,7 +17,6 @@ export const loginUser = async (username, password) => {
 
     const data = await response.json();
 
-    // Store the entire user data object
     await AsyncStorage.setItem('userData', JSON.stringify(data));
 
     return data;

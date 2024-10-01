@@ -14,8 +14,6 @@ const ModalExito = ({ isOpen, onClose, message }) => {
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>{message}</Text>
           <AntDesign name="checkcircle" size={60} color="#4CAF50" style={styles.modalIcon} />
-          
-          {/* Colocamos la X debajo del tick */}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <AntDesign name="close" size={24} color="white" />
           </TouchableOpacity>
@@ -51,7 +49,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButton: {
-    marginTop: 20, // Añadimos un margen para separar el botón del ícono
+    marginTop: 20, 
     alignItems: 'center',
   },
 });

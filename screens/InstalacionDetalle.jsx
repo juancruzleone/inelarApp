@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, Image, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import * as Print from 'expo-print';
-
 import { useDevices } from '../components/InstalacionDetalle/hooks/useDevices.jsx';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 import ModalCrear from '../components/InstalacionDetalle/components/ModalCrear.jsx';
 import ModalEditar from '../components/InstalacionDetalle/components/ModalEditar.jsx';
 import ModalEliminar from '../components/InstalacionDetalle/components/ModalEliminar.jsx';
+import ModalImprimir from '../components/InstalacionDetalle/components/ModalImprimir.jsx';
 import ModalExito from '../components/InstalacionDetalle/components/ModalExito.jsx';
 
 export default function InstalacionDetalle() {
@@ -17,7 +16,7 @@ export default function InstalacionDetalle() {
   const { installation } = route.params;
   const { devices, loading, error, addDevice, updateDevice, deleteDevice, refreshDevices } = useDevices(installation._id); 
   const [search, setSearch] = useState('');
-  const [qrModalVisible, setQrModalVisible] = useState(false);
+  const [printModalVisible, setPrintModalVisible] = useState(false);
   const [selectedQR, setSelectedQR] = useState(null);
   const [createModalVisible, setCreateModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -77,41 +76,19 @@ export default function InstalacionDetalle() {
     }
   };
 
- 
   const handleSuccessModalClose = () => {
     setSuccessModalVisible(false);
     refreshDevices(); 
   };
 
-  const openQRModal = (qrCode) => {
+  const openPrintModal = (qrCode) => {
     setSelectedQR(qrCode);
-    setQrModalVisible(true);
+    setPrintModalVisible(true);
   };
 
-  const closeQRModal = () => {
-    setQrModalVisible(false);
+  const closePrintModal = () => {
+    setPrintModalVisible(false);
     setSelectedQR(null);
-  };
-
-  const handlePrintQR = async (qrCode) => {
-    try {
-      const html = `
-        <html>
-          <body>
-            <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?data=${qrCode}&size=200x200" />
-            </div>
-          </body>
-        </html>
-      `;
-      
-      await Print.printAsync({
-        html: html,
-      });
-    } catch (error) {
-      console.error('Error al imprimir:', error);
-      alert('Hubo un error al intentar imprimir el código QR.');
-    }
   };
 
   const renderItem = ({ item }) => (
@@ -122,7 +99,7 @@ export default function InstalacionDetalle() {
 
       <View style={styles.deviceActions}>
         {item.codigoQR && (
-          <TouchableOpacity onPress={() => openQRModal(item.codigoQR)}>
+          <TouchableOpacity onPress={() => openPrintModal(item.codigoQR)}>
             <Ionicons name="print" size={30} color="white" />
           </TouchableOpacity>
         )}
@@ -201,6 +178,12 @@ export default function InstalacionDetalle() {
         message={successMessage}
       />
 
+      <ModalImprimir
+        isVisible={printModalVisible}
+        onClose={closePrintModal}
+        qrCode={selectedQR}
+      />
+
       <Footer />
     </View>
   );
@@ -261,11 +244,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  qrCodeImageLarge: {
-    width: 200,
-    height: 200,
-    marginVertical: 20,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -281,28 +259,5 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     marginTop: 20,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.8)',
-  },
-  modalContent: {
-    backgroundColor: '#1d1d1d',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  modalButton: {
-    color: '#C75F00',
-    marginTop: 20,
-    fontSize: 16,
   },
 });

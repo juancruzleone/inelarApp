@@ -16,7 +16,7 @@ import CapacitacionDetectores from './screens/CapacitacionDetectores';
 import CapacitacionExtintores from './screens/CapacitacionExtintores';
 import CapacitacionMangueras from './screens/CapacitacionMangueras';
 import CapacitacionAlarmas from './screens/CapacitacionAlarmas';
-import AgregarDispositivo from './screens/AgregarDispositivo';
+
 
 
 const Stack = createStackNavigator();
@@ -88,11 +88,6 @@ export default function App() {
         <Stack.Screen
           name="CapacitacionAlarmas"
           component={CapacitacionAlarmas}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AgregarDispositivo"
-          component={AgregarDispositivo}
           options={{ headerShown: false }}
         />
         <Stack.Screen
