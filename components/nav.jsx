@@ -5,8 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsAdmin } from '../components/inicio/hooks/useIsAdmin.jsx';
 
-const Nav = () => {
+export default function Nav() {
   const [showMenu, setShowMenu] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
@@ -16,6 +17,7 @@ const Nav = () => {
   const menuWidth = Dimensions.get('window').width - 100;
   const menuTranslateX = new Animated.Value(-menuWidth);
   const navigation = useNavigation();
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
     Animated.spring(menuTranslateX, {
@@ -66,6 +68,7 @@ const Nav = () => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userName');
+      await AsyncStorage.removeItem('userRole');
       closeMenu();
       setLogoutModalVisible(true);
 
@@ -118,9 +121,11 @@ const Nav = () => {
             <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Capacitaciones')}>
               <Text style={styles.menuItemText}>Manuales</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Instalaciones')}>
-              <Text style={styles.menuItemText}>Instalaciones</Text>
-            </TouchableOpacity>
+            {isAdmin && (
+              <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Instalaciones')}>
+                <Text style={styles.menuItemText}>Instalaciones</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity style={[styles.menuItem, styles.botonCerrarSesion]} onPress={handleLogout}>
               <Text style={styles.textoCerrarSesion}>Cerrar Sesión</Text>
             </TouchableOpacity>
@@ -170,7 +175,7 @@ const Nav = () => {
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -331,5 +336,3 @@ const ModalExito = ({ modalVisible, setModalVisible }) => {
     </Modal>
   );
 };
-
-export default Nav;

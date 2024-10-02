@@ -10,10 +10,12 @@ import { useUserName } from '../components/inicio/hooks/useUserName.jsx';
 import ModalCrear from '../components/inicio/components/ModalCrear.jsx';
 import ModalExito from '../components/inicio/components/ModalExito.jsx';
 import useInstalaciones from '../components/inicio/hooks/useInstalaciones.jsx';
+import { useIsAdmin } from '../components/inicio/hooks/useIsAdmin.jsx';
 
 export default function Inicio() {
   const navigation = useNavigation();
   const userName = useUserName();
+  const isAdmin = useIsAdmin();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalExitoVisible, setModalExitoVisible] = useState(false);
   const {
@@ -69,14 +71,16 @@ export default function Inicio() {
           image={require('../assets/libro.png')} 
         />
       </View>
-      <View style={styles.contenedorInstalaciones}>
-        <CajaServicios 
-          onPress={handlePressInstalaciones} 
-          text="Instalaciones" 
-          image={require('../assets/instalaciones.png')} 
-        />
-      </View>
-      <BotonAgregarInstalacion onPress={handlePressAgregarInstalacion} />
+      {isAdmin && (
+        <View style={styles.contenedorInstalaciones}>
+          <CajaServicios 
+            onPress={handlePressInstalaciones} 
+            text="Instalaciones" 
+            image={require('../assets/instalaciones.png')} 
+          />
+        </View>
+      )}
+      {isAdmin && <BotonAgregarInstalacion onPress={handlePressAgregarInstalacion} />}
 
       <ModalCrear 
         isOpen={modalVisible}

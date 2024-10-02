@@ -17,11 +17,22 @@ export const loginUser = async (username, password) => {
 
     const data = await response.json();
 
+    console.log("Respuesta del servidor:", data);
+
+   
     await AsyncStorage.setItem('userData', JSON.stringify(data));
+
+
+    const userRole = data.cuenta?.role; 
+    if (userRole) {
+      await AsyncStorage.setItem('userRole', userRole); 
+    } else {
+      console.warn("El rol no está presente en la respuesta del servidor.");
+    }
 
     return data;
   } catch (error) {
     console.error("Error during login:", error.message);
     throw error;
   }
-}
+};
