@@ -10,14 +10,12 @@ import SolicitudInstalacion from './screens/SolicitarInstalacion';
 import SolicitudMantenimiento from './screens/SolicitarMantenimiento';
 import SolicitudProvision from './screens/SolicitarProvision';
 import SolicitudServiciotecnico from './screens/SolicitarServicioTecnico';
-import Instalaciones from './screens/Instalaciones'
+import Instalaciones from './screens/Instalaciones';
 import InstalacionDetalle from './screens/InstalacionDetalle'; 
 import CapacitacionDetectores from './screens/CapacitacionDetectores';
 import CapacitacionExtintores from './screens/CapacitacionExtintores';
 import CapacitacionMangueras from './screens/CapacitacionMangueras';
 import CapacitacionAlarmas from './screens/CapacitacionAlarmas';
-
-
 
 const Stack = createStackNavigator();
 
@@ -38,7 +36,10 @@ export default function App() {
         <Stack.Screen
           name="Inicio"
           component={Inicio}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            gestureEnabled: false, // Deshabilita el gesto de deslizar hacia atrás
+          }}
         />
         <Stack.Screen
           name="Capacitaciones"

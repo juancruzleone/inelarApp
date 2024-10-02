@@ -13,6 +13,7 @@ export const useLogin = (navigation) => {
   const handleSubmit = async () => {
     setError('');
 
+    // Validar los campos del formulario
     const validationError = validateLoginFields(username, password); 
     if (validationError) {
       setError(validationError);
@@ -20,15 +21,27 @@ export const useLogin = (navigation) => {
     }
 
     try {
+      // Llamar a la API para iniciar sesión
       const data = await loginUser(username, password);
+      
+      // Guardar el nombre de usuario en AsyncStorage
       await AsyncStorage.setItem('userName', username);
 
+      // Mostrar el modal de éxito
       setLoginModalVisible(true); 
+
+      // Después de 1.5 segundos, ocultar el modal y redirigir al inicio
       setTimeout(() => {
         setLoginModalVisible(false);
-        navigation.navigate('Inicio');
+
+        // Reiniciar la pila de navegación para que no se pueda volver a "Login"
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Inicio' }],
+        });
       }, 1500); 
     } catch (err) {
+      // Mostrar un error si ocurre
       setError(err.message === "Validation error" ? "Usuario o contraseña incorrectos." : `Error en la solicitud: ${err.message}`);
     }
   };

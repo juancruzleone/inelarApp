@@ -118,8 +118,8 @@ const Nav = () => {
             <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Capacitaciones')}>
               <Text style={styles.menuItemText}>Manuales</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('AgregarDispositivo')}>
-              <Text style={styles.menuItemText}>Dispositivos</Text>
+            <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Instalaciones')}>
+              <Text style={styles.menuItemText}>Instalaciones</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.menuItem, styles.botonCerrarSesion]} onPress={handleLogout}>
               <Text style={styles.textoCerrarSesion}>Cerrar Sesión</Text>
