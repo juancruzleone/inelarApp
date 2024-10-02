@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Animated } from 'react-native';
+import { StyleSheet, View, Animated } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import Logo from '../assets/logo.svg';
 
 const PantallaCarga = ({ navigation }) => {
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -22,7 +23,7 @@ const PantallaCarga = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Animated.View style={{ opacity: fadeAnim }}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        <Logo width={100} height={160} />
       </Animated.View>
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#C75F00" />
@@ -37,10 +38,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  logo: {
-    width: 100,
-    height: 160,
   },
   loadingContainer: {
     marginTop: 20,

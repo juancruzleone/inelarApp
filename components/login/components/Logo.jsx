@@ -1,12 +1,10 @@
 import React from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import LogoSVG from '../../../assets/logo.svg'; 
 
-const Logo = () => (
+const Logo = ({ width, height }) => (
   <View style={styles.logoContainer}>
-    <Image
-      style={styles.logo}
-      source={require('../../../assets/logo.png')}
-    />
+    <LogoSVG width={width} height={height} style={styles.logo} />
   </View>
 );
 
@@ -14,13 +12,13 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginTop: 120,
     marginBottom: 40,
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
   logo: {
-    width: 100,
-    height: 160,
+    width: 60,
+    height: 60
   },
 });
 
