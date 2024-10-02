@@ -10,7 +10,13 @@ export default function ErrorItem({ error, expandedError, toggleError }) {
         <Feather name={expandedError === error.id ? 'chevron-up' : 'chevron-down'} size={24} color="white" />
       </TouchableOpacity>
       {expandedError === error.id && (
-        <Text style={styles.errorSolution}>{error.solution}</Text>
+        <View style={styles.errorDetails}>
+          <Text style={styles.errorProblemTitle}>Problema:</Text>
+          <Text style={styles.errorProblem}>{error.problem}</Text>
+          
+          <Text style={styles.errorSolutionTitle}>Solución:</Text>
+          <Text style={styles.errorSolution}>{error.solution}</Text>
+        </View>
       )}
     </View>
   );
@@ -32,9 +38,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
+  errorDetails: {
+    marginTop: 10,
+  },
+  errorProblemTitle: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  errorProblem: {
+    fontSize: 16,
+    color: 'white',
+  },
+  errorSolutionTitle: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
   errorSolution: {
     fontSize: 16,
-    color: '#00FF00',
-    marginTop: 10,
+    color: 'white',
   },
 });
