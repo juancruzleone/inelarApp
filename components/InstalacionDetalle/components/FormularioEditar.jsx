@@ -11,7 +11,7 @@ const FormularioEditar = ({
   const [selectedCategory, setSelectedCategory] = useState(selectedDevice.categoria || 'Seleccione una categoría');
   let actionSheetRef = null;
 
-  const categories = ['bomba', 'hidrante'];
+  const categories = ['detector', 'extintor', 'manguera', 'central'];
 
   const handleChange = (name, value) => {
     setDevice(prev => ({ ...prev, [name]: value }));

@@ -6,7 +6,7 @@ const FormularioCrear = ({ onSubmit, onClose }) => {
   const [device, setDevice] = useState({ nombre: '', ubicacion: '', categoria: 'Seleccione una categoría' });
   const actionSheetRef = useRef(null);
 
-  const categories = ['bomba', 'hidrante'];
+  const categories = ['detector', 'extintor', 'manguera', 'central'];
 
   const handleChange = (name, value) => {
     setDevice(prev => ({ ...prev, [name]: value }));
