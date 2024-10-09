@@ -94,8 +94,10 @@ export default function InstalacionDetalle() {
   const renderItem = ({ item }) => (
     <View style={styles.deviceItem}>
       <Text style={styles.deviceName}>{item.nombre || 'Sin nombre'}</Text>
-      <Text style={styles.deviceLocation}>{item.ubicacion || 'Sin ubicación'}</Text>
-      <Text style={styles.deviceCategory}>{item.categoria || 'Sin categoría'}</Text>
+      <View style={styles.contenidoDispositivo}>
+        <Text style={styles.deviceLocation}>{item.ubicacion || 'Sin ubicación'}</Text>
+        <Text style={styles.deviceCategory}>{item.categoria || 'Sin categoría'}</Text>
+      </View>
 
       <View style={styles.deviceActions}>
         {item.codigoQR && (
@@ -108,9 +110,6 @@ export default function InstalacionDetalle() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDeleteDevice(item)}>
           <MaterialIcons name="delete" size={30} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Ionicons name="document-text" size={30} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -150,6 +149,7 @@ export default function InstalacionDetalle() {
         data={filteredDevices}
         renderItem={renderItem}
         keyExtractor={(item) => item._id.toString()}
+        ListFooterComponent={<View style={{ height: 80 }} />}  // Espacio antes del footer
       />
 
       <ModalCrear
@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
   deviceActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10
   },
   loadingContainer: {
     flex: 1,
@@ -260,4 +261,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
+  contenidoDispositivo: {
+    marginTop: 10
+  }
 });
