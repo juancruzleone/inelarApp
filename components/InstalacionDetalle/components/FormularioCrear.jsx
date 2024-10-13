@@ -21,7 +21,6 @@ const FormularioCrear = ({ onSubmit, onClose }) => {
 
   const handleSubmit = () => {
     onSubmit(device);
-    setDevice({ nombre: '', ubicacion: '', categoria: 'Seleccione una categoría' });
   };
 
   return (
