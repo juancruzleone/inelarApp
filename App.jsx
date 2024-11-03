@@ -5,7 +5,7 @@ import PantallaCarga from './screens/pantallacarga';
 import Login from './screens/login';
 import Inicio from './screens/inicio';
 import Capacitaciones from './screens/capacitaciones';
-import Servicios from './screens/Servicios';
+import Servicios from './screens/servicios';
 import SolicitudInstalacion from './screens/SolicitarInstalacion';
 import SolicitudMantenimiento from './screens/SolicitarMantenimiento';
 import SolicitudProvision from './screens/SolicitarProvision';
