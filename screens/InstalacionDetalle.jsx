@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, Linking } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useDevices } from '../components/InstalacionDetalle/hooks/useDevices.jsx';
@@ -10,11 +10,12 @@ import ModalEditar from '../components/InstalacionDetalle/components/ModalEditar
 import ModalEliminar from '../components/InstalacionDetalle/components/ModalEliminar.jsx';
 import ModalImprimir from '../components/InstalacionDetalle/components/ModalImprimir.jsx';
 import ModalExito from '../components/InstalacionDetalle/components/ModalExito.jsx';
+import { getLastMaintenanceForDevice } from '../components/InstalacionDetalle/services/FetchDispositivos.jsx';
 
 export default function InstalacionDetalle() {
   const route = useRoute();
   const { installation } = route.params;
-  const { devices, loading, error, addDevice, updateDevice, deleteDevice, refreshDevices } = useDevices(installation._id); 
+  const { devices, loading, error, addDevice, updateDevice, deleteDevice, refreshDevices } = useDevices(installation._id);
   const [search, setSearch] = useState('');
   const [printModalVisible, setPrintModalVisible] = useState(false);
   const [selectedQR, setSelectedQR] = useState(null);
@@ -78,7 +79,7 @@ export default function InstalacionDetalle() {
 
   const handleSuccessModalClose = () => {
     setSuccessModalVisible(false);
-    refreshDevices(); 
+    refreshDevices();
   };
 
   const openPrintModal = (qrCode) => {
@@ -89,6 +90,24 @@ export default function InstalacionDetalle() {
   const closePrintModal = () => {
     setPrintModalVisible(false);
     setSelectedQR(null);
+  };
+
+  const handleMaintenanceInfo = async (device) => {
+    try {
+      const maintenance = await getLastMaintenanceForDevice(installation._id, device._id);
+      if (maintenance && maintenance.pdfUrl) {
+        const supported = await Linking.canOpenURL(maintenance.pdfUrl);
+        if (supported) {
+          await Linking.openURL(maintenance.pdfUrl);
+        } else {
+          console.error("No se puede abrir el URL:", maintenance.pdfUrl);
+        }
+      } else {
+        console.log("No hay mantenimiento registrado para este dispositivo");
+      }
+    } catch (error) {
+      console.error('Error al obtener o abrir el último mantenimiento:', error);
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -110,6 +129,9 @@ export default function InstalacionDetalle() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDeleteDevice(item)}>
           <MaterialIcons name="delete" size={30} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleMaintenanceInfo(item)}>
+          <MaterialIcons name="build" size={30} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -149,7 +171,7 @@ export default function InstalacionDetalle() {
         data={filteredDevices}
         renderItem={renderItem}
         keyExtractor={(item) => item._id.toString()}
-        ListFooterComponent={<View style={{ height: 80 }} />}  // Espacio antes del footer
+        ListFooterComponent={<View style={{ height: 80 }} />}
       />
 
       <ModalCrear
