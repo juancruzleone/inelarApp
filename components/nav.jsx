@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, Image, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, Image, Alert, Modal, Linking } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsAdmin } from '../components/inicio/hooks/useIsAdmin.jsx';
 
-export default function Nav() {
+export default function Component() {
   const [showMenu, setShowMenu] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanResultModalVisible, setScanResultModalVisible] = useState(false);
@@ -26,13 +25,6 @@ export default function Nav() {
     }).start();
   }, [showMenu]);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
   const handleMenuPress = () => {
     setShowMenu(!showMenu);
   };
@@ -47,22 +39,22 @@ export default function Nav() {
   };
 
   const handleScanPress = () => {
-    if (hasPermission === null) {
-      return;
+    if (!permission?.granted) {
+      requestPermission();
+    } else {
+      setIsScanning(true);
     }
-
-    if (hasPermission === false) {
-      Alert.alert('No access to camera', 'Please grant camera permission to use this feature.');
-      return;
-    }
-
-    setIsScanning(true);
   };
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScannedData(data);
-    setScanResultModalVisible(true);
     setIsScanning(false);
+    
+    if (data.startsWith('http://') || data.startsWith('https://')) {
+      Linking.openURL(data).catch(() => {});
+    } else {
+      setScanResultModalVisible(true);
+    }
   };
 
   const handleLogout = async () => {
@@ -80,8 +72,8 @@ export default function Nav() {
         });
       }, 1500);
     } catch (error) {
-      console.error('Error during logout:', error);
-      Alert.alert('Error', 'An error occurred while logging out. Please try again.');
+      console.error('Error durante el cierre de sesión:', error);
+      Alert.alert('Error', 'Ocurrió un error al cerrar sesión. Por favor, intenta de nuevo.');
     }
   };
 
@@ -162,9 +154,12 @@ export default function Nav() {
         onRequestClose={() => setIsScanning(false)}
       >
         <View style={styles.scannerContainer}>
-          {hasPermission && (
-            <BarCodeScanner
-              onBarCodeScanned={handleBarCodeScanned}
+          {permission?.granted && (
+            <CameraView
+              onBarcodeScanned={handleBarCodeScanned}
+              barcodeScannerSettings={{
+                barcodeTypes: ["qr"],
+              }}
               style={StyleSheet.absoluteFillObject}
             />
           )}
@@ -295,9 +290,30 @@ const styles = StyleSheet.create({
   },
   scannerContainer: {
     flex: 1,
+    backgroundColor: 'black',
+  },
+  scanner: {
+    flex: 1,
+  },
+  scannerOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
+  scannerFrame: {
+    width: 250,
+    height: 250,
+    borderWidth: 2,
+    borderColor: 'white',
+    backgroundColor: 'transparent',
+  },
+  scannerCorner: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderColor: '#C75F00',
+    borderWidth: 3,
   },
   closeScannerButton: {
     position: 'absolute',

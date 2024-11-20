@@ -16,14 +16,34 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.juanleone.inelarapp"
+      "bundleIdentifier": "com.juanleone.inelarapp",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["http", "https"]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.juanleone.inelarapp"
+      "package": "com.juanleone.inelarapp",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*"
+            },
+            {
+              "scheme": "http",
+              "host": "*"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
+      "permissions": ["INTERNET", "CAMERA"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,6 +52,15 @@
       "eas": {
         "projectId": "5a659921-5e16-4cca-905b-a9c126f6f463"
       }
-    }
+    },
+    "newArchEnabled": true,
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permitir a $(PRODUCT_NAME) acceder a tu cámara."
+        }
+      ]
+    ]
   }
 }
