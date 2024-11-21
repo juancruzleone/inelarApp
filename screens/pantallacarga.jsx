@@ -7,15 +7,17 @@ const PantallaCarga = ({ navigation }) => {
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
+    // Inicia la animación inmediatamente
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+
+    // Navega a la pantalla de Login después de 3 segundos
     const timer = setTimeout(() => {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start(() => {
-        navigation.replace('Login');
-      });
-    }, 3000); 
+      navigation.replace('Login');
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [navigation, fadeAnim]);

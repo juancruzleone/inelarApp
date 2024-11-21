@@ -16,7 +16,7 @@ const ModalEliminar = ({ isVisible, onClose, onConfirm, deviceName }) => {
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={[styles.button, styles.confirmButton]} onPress={onConfirm}>
-              <Text style={styles.buttonText}>Eliminar</Text>
+              <Text style={styles.buttonTextEliminar}>Eliminar</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onClose}>
               <Text style={styles.buttonText}>Cancelar</Text>
@@ -67,6 +67,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     fontSize: 16,
+    fontWeight: 'bold'
+  },
+  buttonTextEliminar: {
+    color: '#121212',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold'
   },
 });
 

@@ -242,13 +242,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#C75F00',
     borderRadius: 10,
     padding: 2,
-    height: 40,
+    height: 50,
     width: 180,
     alignItems: 'center',
     marginTop: 15,
+
   },
   textoCerrarSesion: {
-    color: 'white',
+    color: '#121212',
     fontSize: 16,
     fontWeight: 'bold',
   },

@@ -1,25 +1,29 @@
 import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { validateUsername, validatePassword } from "../utils/Validaciones.jsx";
-import { loginUser } from '../services/FetchLogin.jsx';
+import { validateUsername, validateEmail, validatePassword } from "../utils/Validaciones.jsx";
+import { registerUser } from '../services/FetchRegister.jsx';
 
-export const useLogin = (navigation) => {
+export const useRegister = (navigation) => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({
     username: null,
-    password: null,
-    general: null
+    email: null,
+    password: null
   });
   const [formTouched, setFormTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [loginModalVisible, setLoginModalVisible] = useState(false);
+  const [registerModalVisible, setRegisterModalVisible] = useState(false);
 
   const validateField = useCallback((field, value) => {
     let error = null;
     switch (field) {
       case 'username':
         error = validateUsername(value);
+        break;
+      case 'email':
+        error = validateEmail(value);
         break;
       case 'password':
         error = validatePassword(value);
@@ -31,11 +35,11 @@ export const useLogin = (navigation) => {
   const validateForm = useCallback(() => {
     const newErrors = {
       username: validateField('username', username),
-      password: validateField('password', password),
-      general: null
+      email: validateField('email', email),
+      password: validateField('password', password)
     };
     setErrors(newErrors);
-  }, [username, password, validateField]);
+  }, [username, email, password, validateField]);
 
   useEffect(() => {
     if (formTouched) {
@@ -51,6 +55,9 @@ export const useLogin = (navigation) => {
       case 'username':
         setUsername(value);
         break;
+      case 'email':
+        setEmail(value);
+        break;
       case 'password':
         setPassword(value);
         break;
@@ -61,26 +68,20 @@ export const useLogin = (navigation) => {
     setFormTouched(true);
     validateForm();
 
-    if (errors.username || errors.password) {
+    if (Object.values(errors).some(error => error !== null)) {
       return;
     }
 
     try {
-      const data = await loginUser(username, password);
+      const data = await registerUser(username, email, password);
       await AsyncStorage.setItem('userName', username);
-      setLoginModalVisible(true);
+      setRegisterModalVisible(true);
       setTimeout(() => {
-        setLoginModalVisible(false);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Inicio' }],
-        });
+        setRegisterModalVisible(false);
+        navigation.navigate('Login');
       }, 1500);
     } catch (err) {
-      setErrors(prev => ({
-        ...prev,
-        general: err.message === "Validation error" ? "Usuario o contraseña incorrectos." : `Error en la solicitud: ${err.message}`
-      }));
+      setErrors(prev => ({ ...prev, general: err.message || "Error en el registro" }));
     }
   };
 
@@ -90,12 +91,13 @@ export const useLogin = (navigation) => {
 
   return {
     username,
+    email,
     password,
     errors,
     formTouched,
     showPassword,
     togglePasswordVisibility,
-    loginModalVisible,
+    registerModalVisible,
     handleChange,
     handleSubmit,
   };

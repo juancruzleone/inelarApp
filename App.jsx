@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as SplashScreen from 'expo-splash-screen';
+import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import PantallaCarga from './screens/pantallacarga';
 import Login from './screens/login';
+import Register from './screens/register'; // Importamos el componente Register
 import Inicio from './screens/inicio';
 import Capacitaciones from './screens/capacitaciones';
 import Servicios from './screens/servicios';
@@ -19,10 +22,34 @@ import CapacitacionAlarmas from './screens/CapacitacionAlarmas';
 
 const Stack = createStackNavigator();
 
+// Mantén la pantalla de carga visible mientras se inicializa la app
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Realiza cualquier tarea de inicialización aquí
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simula una carga de 2 segundos
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Oculta la pantalla de carga de Expo
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    prepare();
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="AuthLoading">
+        <Stack.Screen
+          name="AuthLoading"
+          component={AuthLoadingScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="PantallaCarga"
           component={PantallaCarga}
@@ -31,6 +58,11 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -105,3 +137,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+

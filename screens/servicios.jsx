@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   book: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     borderRadius: 10,
   },
   containerList: {

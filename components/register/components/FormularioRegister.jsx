@@ -2,20 +2,20 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const LoginForm = ({
-  username,
-  password,
+const RegisterForm = ({ 
+  username, 
+  email, 
+  password, 
   handleChange,
-  showPassword,
-  togglePasswordVisibility,
-  handleSubmit,
+  showPassword, 
+  togglePasswordVisibility, 
+  handleSubmit, 
   errors,
-  formTouched,
-  navigation
+  formTouched
 }) => {
   return (
-    <View style={styles.containerLogin}>
-      <Text style={styles.title}>Inicia sesión</Text>
+    <View style={styles.containerRegister}>
+      <Text style={styles.title}>Registro de cuenta</Text>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Usuario</Text>
         <TextInput
@@ -26,6 +26,18 @@ const LoginForm = ({
           autoCapitalize="none"
         />
         {formTouched && errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ingresa tu email"
+          value={email}
+          onChangeText={(text) => handleChange('email', text)}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        {formTouched && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Contraseña</Text>
@@ -45,20 +57,14 @@ const LoginForm = ({
       </View>
       {errors.general && <Text style={styles.errorText}>{errors.general}</Text>}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
+        <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>¿No tienes una cuenta?</Text>
-        <TouchableOpacity onPress={() => navigation && navigation.navigate('Register')}>
-          <Text style={styles.registerLink}>Regístrate aquí</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  containerLogin: {
+  containerRegister: {
     backgroundColor: '#121212',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -122,22 +128,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
-  registerContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  registerText: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  registerLink: {
-    color: '#C75F00',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginLeft: 5,
-  },
 });
 
-export default LoginForm;
+export default RegisterForm;
 

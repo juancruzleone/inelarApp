@@ -23,10 +23,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     marginRight: 25,
+    height: 120
   },
   image: {
-    width: 120,
-    height: 120,
+    width: 60,
+    height: 60,
     marginBottom: 10,
     borderRadius: 10,
   },

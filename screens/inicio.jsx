@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
   },
   contenedorServiciosHome: {
     flexDirection: 'row',
-    margin: 35,
+    margin: 0,
     justifyContent: 'space-between',
-    width: '80%',
+    width: '90%',
   },
   contenedorInstalaciones: {
     alignItems: 'center',

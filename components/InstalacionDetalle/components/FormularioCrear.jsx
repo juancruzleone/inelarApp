@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     color: 'white',
     backgroundColor: '#2d2d2d',
     width: 260,
+    height: 50
   },
   selectButton: {
     backgroundColor: 'white',
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
   selectText: {
     fontSize: 16,
     color: 'black',
+    fontWeight: 'bold'
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -126,12 +128,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#2d2d2d',
   },
   buttonText: {
-    color: 'white',
+    color: '#121212',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
   buttonTextCancelar: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
 });
 

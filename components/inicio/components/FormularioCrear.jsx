@@ -133,12 +133,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   form: {
-    padding: 20,
+    marginTop: 20
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
     color: 'white',
+    marginTop: 8
   },
   input: {
     borderWidth: 1,
@@ -148,6 +149,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 10,
     color: 'white',
+    width: 250,
+    height: 50,
     backgroundColor: '#2d2d2d',
   },
   selectButton: {
@@ -161,6 +164,7 @@ const styles = StyleSheet.create({
   selectText: {
     fontSize: 16,
     color: 'black',
+    fontWeight: 'bold'
   },
   error: {
     color: 'red',
@@ -184,10 +188,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
   buttonTextCancelar: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 

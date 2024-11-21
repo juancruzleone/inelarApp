@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   printButtonText: {
-    color: '#fff',
+    color: '#121212',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -97,5 +97,6 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: 'bold'
   },
 });

@@ -88,10 +88,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
   buttonTextCancelar: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
 });
 

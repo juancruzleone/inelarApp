@@ -1,28 +1,30 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { useLogin } from '../components/login/hooks/useLogin.jsx';
-import Logo from '../components/login/components/Logo.jsx';
-import FormularioLogin from '../components/login/components/FormularioLogin.jsx';
-import { SuccessModal } from '../components/login/components/ModalExito.jsx';
+import { useRegister } from '../components/register/hooks/useRegister.jsx';
+import Logo from '../components/register/components/Logo.jsx';
+import FormularioRegister from '../components/register/components/FormularioRegister.jsx';
+import { SuccessModal } from '../components/register/components/ModalExito.jsx';
 
-const Login = ({ navigation }) => {
+const Register = ({ navigation }) => {
   const {
     username,
+    email,
     password,
     errors,
     formTouched,
     showPassword,
     togglePasswordVisibility,
-    loginModalVisible,
+    registerModalVisible,
     handleChange,
     handleSubmit,
-  } = useLogin(navigation);
+  } = useRegister(navigation);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Logo />
-      <FormularioLogin
+      <FormularioRegister
         username={username}
+        email={email}
         password={password}
         handleChange={handleChange}
         showPassword={showPassword}
@@ -30,9 +32,8 @@ const Login = ({ navigation }) => {
         handleSubmit={handleSubmit}
         errors={errors}
         formTouched={formTouched}
-        navigation={navigation}
       />
-      <SuccessModal isVisible={loginModalVisible} onClose={() => {}} />
+      <SuccessModal isVisible={registerModalVisible} onClose={() => {}} />
     </ScrollView>
   );
 };
@@ -44,5 +45,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Register;
 

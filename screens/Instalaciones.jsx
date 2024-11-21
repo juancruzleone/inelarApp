@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   book: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
   },
   searchContainer: {
     margin: 20,

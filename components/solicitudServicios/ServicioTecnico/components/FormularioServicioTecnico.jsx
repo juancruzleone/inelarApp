@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 24,
     color: 'white',
-    marginBottom: 40,
-    marginTop: 20,
+    marginBottom: 20,
+    marginTop: 50,
   },
   label: {
     fontSize: 16,
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   buttonText: {
-    color: 'white',
+    color: '#121212',
     fontSize: 16,
     fontWeight: 'bold',
   },

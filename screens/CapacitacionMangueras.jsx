@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView, SafeAreaView, StatusBar } from 'react-native';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 import Logo from '../components/capacitaciones/Mangueras/components/Logo.jsx';
@@ -10,35 +10,52 @@ export default function CapacitacionMangueras() {
   const { errors, expandedError, toggleError } = useErrorList();
 
   return (
-    <View style={styles.container}>
-      <Nav />
-      <Logo source={require('../assets/manguera.png')} />
-      
-      <View style={styles.faqContainer}>
-        {errors.map((error) => (
-          <ErrorItem
-            key={error.id}
-            error={error}
-            expandedError={expandedError}
-            toggleError={toggleError}
-          />
-        ))}
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" />
+      <View style={styles.navContainer}>
+        <Nav />
       </View>
-      
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Logo source={require('../assets/manguera.png')} />
+        
+        <View style={styles.faqContainer}>
+          {errors.map((error) => (
+            <ErrorItem
+              key={error.id}
+              error={error}
+              expandedError={expandedError}
+              toggleError={toggleError}
+            />
+          ))}
+        </View>
+      </ScrollView>
       <Footer />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     backgroundColor: '#1d1d1d',
+  },
+  navContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingTop: 100,
+    paddingBottom: 20,
   },
   faqContainer: {
     width: '90%',
     marginTop: 20,
+    paddingBottom: 100, 
   },
 });
+

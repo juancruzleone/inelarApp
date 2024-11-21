@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   form: {
-    padding: 20,
+    marginTop: 20
   },
   label: {
     fontSize: 16,
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 10,
     color: 'white',
+    width: 250,
     backgroundColor: '#2d2d2d',
   },
   selectButton: {
@@ -159,10 +160,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    width: 250,
   },
   selectText: {
     fontSize: 16,
     color: 'black',
+    fontWeight: 'bold'
   },
   error: {
     color: 'red',
@@ -186,10 +189,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'black',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
   buttonTextCancelar: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 

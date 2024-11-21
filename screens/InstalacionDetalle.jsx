@@ -239,7 +239,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButtonText: {
-    color: 'white',
+    color: '#121212',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   deviceItem: {
@@ -251,10 +252,11 @@ const styles = StyleSheet.create({
   },
   deviceName: {
     color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   deviceLocation: {
-    color: 'gray',
+    color: 'white',
     fontSize: 14,
   },
   deviceCategory: {

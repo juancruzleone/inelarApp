@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     paddingHorizontal: 10,
+    height: 40,
+    justifyContent: 'center',
   },
   searchBar: {
-    marginTop: 5,
-    marginBottom: 5,
     fontSize: 16,
     color: 'black',
     width: 300,
@@ -113,23 +113,22 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: '#121212',
     padding: 20,
-    height: 200,
     borderRadius: 30,
-    margin: 0,
-    width: '90%',
+    width: 140,
+    height: 120,
     marginBottom: 20,
     alignItems: 'center',
     marginRight: 25
   },
   image: {
-    width: 120,
-    height: 120,
+    width: 60,
+    height: 60,
     marginBottom: 10,
     borderRadius: 10,
   },
   book: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     borderRadius: 10,
   },
   title: {
@@ -147,3 +146,4 @@ const styles = StyleSheet.create({
     marginTop: 35,
   }
 });
+
