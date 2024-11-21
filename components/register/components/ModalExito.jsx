@@ -11,8 +11,8 @@ export const SuccessModal = ({ isVisible, onClose }) => (
   >
     <View style={styles.modalBackground}>
       <View style={styles.modalContainer}>
-        <Text style={styles.modalText}>Cuenta creada exitosamente</Text>
         <Ionicons name="checkmark-circle-outline" size={60} color="#4CAF50" style={styles.modalIcon} />
+        <Text style={styles.modalText}>Cuenta creada exitosamente</Text>
       </View>
     </View>
   </Modal>

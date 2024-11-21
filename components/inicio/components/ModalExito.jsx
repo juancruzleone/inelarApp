@@ -12,8 +12,8 @@ const ModalExito = ({ isOpen, onClose, message }) => {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>{message}</Text>
           <AntDesign name="checkcircle" size={60} color="#4CAF50" style={styles.modalIcon} />
+          <Text style={styles.modalText}>{message}</Text>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <AntDesign name="close" size={24} color="white" />
           </TouchableOpacity>

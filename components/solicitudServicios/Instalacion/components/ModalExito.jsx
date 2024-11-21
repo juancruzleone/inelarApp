@@ -12,8 +12,8 @@ export default function ModalExito({ modalVisible, setModalVisible }) {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalText}>Solicitud enviada con éxito</Text>
           <Ionicons name="checkmark-circle-outline" size={60} color="#4CAF50" style={styles.modalIcon} />
+          <Text style={styles.modalText}>Solicitud enviada con éxito</Text>
           <TouchableOpacity
             style={styles.modalButton}
             onPress={() => setModalVisible(false)}
