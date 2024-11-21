@@ -5,7 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import PantallaCarga from './screens/pantallacarga';
 import Login from './screens/login';
-import Register from './screens/register'; // Importamos el componente Register
+import Register from './screens/register';
 import Inicio from './screens/inicio';
 import Capacitaciones from './screens/capacitaciones';
 import Servicios from './screens/servicios';

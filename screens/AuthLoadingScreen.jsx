@@ -7,11 +7,15 @@ const AuthLoadingScreen = ({ navigation }) => {
     const checkToken = async () => {
       try {
         const userToken = await AsyncStorage.getItem('userData');
+        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         
-        navigation.replace(userToken ? 'Inicio' : 'Login');
+        // Siempre navega a PantallaCarga primero
+        navigation.replace('PantallaCarga', {
+          nextScreen: userToken && isLoggedIn === 'true' ? 'Inicio' : 'Login'
+        });
       } catch (error) {
         console.error('Error al verificar el token:', error);
-        navigation.replace('Login');
+        navigation.replace('PantallaCarga', { nextScreen: 'Login' });
       }
     };
 

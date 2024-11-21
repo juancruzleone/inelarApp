@@ -3,8 +3,9 @@ import { StyleSheet, View, Animated } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Logo from '../assets/logo.svg';
 
-const PantallaCarga = ({ navigation }) => {
+const PantallaCarga = ({ navigation, route }) => {
   const [fadeAnim] = useState(new Animated.Value(0));
+  const nextScreen = route.params?.nextScreen || 'Login';
 
   useEffect(() => {
     // Inicia la animación inmediatamente
@@ -14,13 +15,13 @@ const PantallaCarga = ({ navigation }) => {
       useNativeDriver: true,
     }).start();
 
-    // Navega a la pantalla de Login después de 3 segundos
+    // Navega a la siguiente pantalla después de 3 segundos
     const timer = setTimeout(() => {
-      navigation.replace('Login');
+      navigation.replace(nextScreen);
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [navigation, fadeAnim]);
+  }, [navigation, fadeAnim, nextScreen]);
 
   return (
     <View style={styles.container}>
@@ -47,3 +48,4 @@ const styles = StyleSheet.create({
 });
 
 export default PantallaCarga;
+

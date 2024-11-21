@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { useLogin } from '../components/login/hooks/useLogin.jsx';
 import Logo from '../components/login/components/Logo.jsx';
 import FormularioLogin from '../components/login/components/FormularioLogin.jsx';
-import { SuccessModal } from '../components/login/components/ModalExito.jsx';
+import ModalExito from '../components/inicio/components/ModalExito.jsx';
 
 const Login = ({ navigation }) => {
   const {
@@ -12,10 +12,11 @@ const Login = ({ navigation }) => {
     errors,
     formTouched,
     showPassword,
-    togglePasswordVisibility,
     loginModalVisible,
+    togglePasswordVisibility,
     handleChange,
     handleSubmit,
+    setLoginModalVisible,
   } = useLogin(navigation);
 
   return (
@@ -32,7 +33,11 @@ const Login = ({ navigation }) => {
         formTouched={formTouched}
         navigation={navigation}
       />
-      <SuccessModal isVisible={loginModalVisible} onClose={() => {}} />
+      <ModalExito 
+        isOpen={loginModalVisible}
+        onClose={() => setLoginModalVisible(false)}
+        message="Sesión iniciada exitosamente"
+      />
     </ScrollView>
   );
 };

@@ -68,6 +68,7 @@ export const useLogin = (navigation) => {
     try {
       const data = await loginUser(username, password);
       await AsyncStorage.setItem('userName', username);
+      await AsyncStorage.setItem('isLoggedIn', 'true');
       setLoginModalVisible(true);
       setTimeout(() => {
         setLoginModalVisible(false);
@@ -94,10 +95,11 @@ export const useLogin = (navigation) => {
     errors,
     formTouched,
     showPassword,
-    togglePasswordVisibility,
     loginModalVisible,
+    togglePasswordVisibility,
     handleChange,
     handleSubmit,
+    setLoginModalVisible,
   };
 };
 
