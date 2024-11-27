@@ -1,21 +1,26 @@
 import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../components/theme/ThemeContext';
 
 const AuthLoadingScreen = ({ navigation }) => {
+  const { theme } = useTheme();
+
   useEffect(() => {
     const checkToken = async () => {
       try {
-        const userToken = await AsyncStorage.getItem('userData');
-        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+        const userData = await AsyncStorage.getItem('userData');
         
-        // Siempre navega a PantallaCarga primero
-        navigation.replace('PantallaCarga', {
-          nextScreen: userToken && isLoggedIn === 'true' ? 'Inicio' : 'Login'
-        });
+        if (userData) {
+          // User data exists, navigate to PantallaCarga and then to Inicio
+          navigation.replace('PantallaCarga', { nextScreen: 'Inicio' });
+        } else {
+          // No user data, navigate directly to Login
+          navigation.replace('Login');
+        }
       } catch (error) {
         console.error('Error al verificar el token:', error);
-        navigation.replace('PantallaCarga', { nextScreen: 'Login' });
+        navigation.replace('Login');
       }
     };
 
@@ -23,7 +28,7 @@ const AuthLoadingScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ActivityIndicator size="large" color="#C75F00" />
     </View>
   );
@@ -34,7 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1d1d1d',
   },
 });
 

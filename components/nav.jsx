@@ -61,6 +61,7 @@ export default function Component() {
 
   const handleLogout = async () => {
     try {
+      await AsyncStorage.removeItem('userData');
       await AsyncStorage.removeItem('userName');
       await AsyncStorage.removeItem('userRole');
       closeMenu();
@@ -70,7 +71,7 @@ export default function Component() {
         setLogoutModalVisible(false);
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Login' }],
+          routes: [{ name: 'AuthLoading' }],
         });
       }, 1500);
     } catch (error) {
