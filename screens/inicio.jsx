@@ -13,16 +13,14 @@ import { useUserName } from '../components/inicio/hooks/useUserName.jsx';
 import ModalCrear from '../components/inicio/components/ModalCrear.jsx';
 import ModalExito from '../components/inicio/components/ModalExito.jsx';
 import useInstalaciones from '../components/inicio/hooks/useInstalaciones.jsx';
+import Nav from '../components/nav';
 
 export default function Inicio() {
-  const [showMenu, setShowMenu] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanResultModalVisible, setScanResultModalVisible] = useState(false);
-  const menuWidth = Dimensions.get('window').width - 100;
-  const menuTranslateX = new Animated.Value(-menuWidth);
   const navigation = useNavigation();
   const isAdmin = useIsAdmin();
   const userName = useUserName();
@@ -39,26 +37,6 @@ export default function Inicio() {
     setErrors,
     resetSuccess
   } = useInstalaciones();
-
-  useEffect(() => {
-    Animated.spring(menuTranslateX, {
-      toValue: showMenu ? 0 : -menuWidth,
-      useNativeDriver: true,
-    }).start();
-  }, [showMenu]);
-
-  const handleMenuPress = () => {
-    setShowMenu(!showMenu);
-  };
-
-  const closeMenu = () => {
-    setShowMenu(false);
-  };
-
-  const handleNavigation = (screen) => {
-    closeMenu();
-    navigation.navigate(screen);
-  };
 
   const handleScanPress = () => {
     if (!permission?.granted) {
@@ -84,7 +62,6 @@ export default function Inicio() {
       await AsyncStorage.removeItem('userName');
       await AsyncStorage.removeItem('userRole');
       await AsyncStorage.removeItem('isLoggedIn');
-      closeMenu();
       setLogoutModalVisible(true);
 
       setTimeout(() => {
@@ -126,52 +103,7 @@ export default function Inicio() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.menuButton} onPress={handleMenuPress}>
-        <Feather name={showMenu ? 'x' : 'menu'} size={24} color="white" style={styles.botonMenuHamburguesa} />
-      </TouchableOpacity>
-
-      <View style={styles.logoContainer}>
-        <Image source={require('../assets/logo-nav.png')} style={styles.logo} />
-      </View>
-
-      <TouchableOpacity style={styles.scanButton} onPress={handleScanPress}>
-        <Image source={require('../assets/escanear.png')} style={styles.scanIcon} />
-      </TouchableOpacity>
-
-      {showMenu && (
-        <Animated.View
-          style={[
-            styles.menuContainer,
-            {
-              transform: [{ translateX: menuTranslateX }],
-            },
-          ]}
-        >
-          <TouchableOpacity style={styles.closeButton} onPress={closeMenu}>
-            <Feather name="x" size={24} color="white" />
-          </TouchableOpacity>
-          <View style={styles.menuItemsContainer}>
-            <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Inicio')}>
-              <Text style={styles.menuItemText}>Inicio</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Servicios')}>
-              <Text style={styles.menuItemText}>Servicios</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Capacitaciones')}>
-              <Text style={styles.menuItemText}>Manuales</Text>
-            </TouchableOpacity>
-            {isAdmin && (
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Instalaciones')}>
-                <Text style={styles.menuItemText}>Instalaciones</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity style={[styles.menuItem, styles.botonCerrarSesion]} onPress={handleLogout}>
-              <Text style={styles.textoCerrarSesion}>Cerrar Sesión</Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      )}
-
+      <Nav />
       <StatusBar style="auto" translucent={true} />
       <ContenedorBienvenida userName={userName} />
       <View style={styles.contenedorServiciosHome}>
@@ -196,6 +128,10 @@ export default function Inicio() {
         </View>
       )}
       {isAdmin && <BotonAgregarInstalacion onPress={handlePressAgregarInstalacion} />}
+
+      <TouchableOpacity style={styles.scanButton} onPress={handleScanPress}>
+        <Image source={require('../assets/escanear.png')} style={styles.scanIcon} />
+      </TouchableOpacity>
 
       <ModalCrear 
         isOpen={modalVisible}
@@ -272,22 +208,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  menuButton: {
-    padding: 8,
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    zIndex: 1,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  logo: {
-    width: 100,
-    height: 40,
-    resizeMode: 'contain',
-  },
   scanButton: {
     padding: 8,
     position: 'absolute',
@@ -300,52 +220,6 @@ const styles = StyleSheet.create({
     height: 24,
     resizeMode: 'contain',
     marginTop: 10
-  },
-  botonMenuHamburguesa: {
-    marginTop: 15,
-  },
-  menuContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    backgroundColor: '#121212',
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    zIndex: 9999990,
-    width: Dimensions.get('window').width - 100,
-    height: 1000,
-  },
-  closeButton: {
-    alignSelf: 'flex-end',
-    padding: 8,
-    borderRadius: 10,
-    marginTop: 50,
-  },
-  menuItemsContainer: {
-    marginTop: 40,
-  },
-  menuItem: {
-    paddingVertical: 12,
-  },
-  menuItemText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  botonCerrarSesion: {
-    backgroundColor: '#C75F00',
-    borderRadius: 10,
-    padding: 2,
-    height: 50,
-    width: 180,
-    alignItems: 'center',
-    marginTop: 15,
-  },
-  textoCerrarSesion: {
-    color: '#121212',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   contenedorServiciosHome: {
     flexDirection: 'row',

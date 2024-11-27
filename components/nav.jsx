@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 40,
     resizeMode: 'contain',
-    marginTop: 15,
+    marginTop: 20,
   },
   scanButton: {
     padding: 8,
@@ -204,10 +204,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     resizeMode: 'contain',
-    marginTop: 15,
+    marginTop: 20,
   },
   botonMenuHamburguesa: {
-    marginTop: 15,
+    marginTop: 20,
   },
   menuContainer: {
     position: 'absolute',
