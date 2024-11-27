@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View } from 'react-native';
+import { ThemeProvider } from './components/theme/ThemeContext';
 import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import PantallaCarga from './screens/pantallacarga';
 import Login from './screens/login';
@@ -24,7 +24,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={{ flex: 1 }}>
+    <ThemeProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="AuthLoading">
           <Stack.Screen
@@ -117,6 +117,6 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </View>
+    </ThemeProvider>
   );
 }

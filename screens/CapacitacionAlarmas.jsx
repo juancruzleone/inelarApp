@@ -5,12 +5,14 @@ import Footer from '../components/footer';
 import Logo from '../components/capacitaciones/Alarmas/components/Logo.jsx';
 import ErrorItem from '../components/capacitaciones/Alarmas/components/ErrorItem';
 import { useErrorList } from '../components/capacitaciones/Alarmas/hooks/useErrorList';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function CapacitacionAlarmas() {
   const { errors, expandedError, toggleError } = useErrorList();
+  const { theme } = useTheme();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <StatusBar barStyle="light-content" />
       <View style={styles.navContainer}>
         <Nav />
@@ -37,7 +39,6 @@ export default function CapacitacionAlarmas() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
   },
   navContainer: {
     position: 'absolute',

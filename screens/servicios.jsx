@@ -7,9 +7,11 @@ import Footer from '../components/footer.jsx';
 import ItemsServicios from '../components/servicios/components/ItemsServicios.jsx';
 import { useBuscarServicio } from '../components/servicios/hooks/useBuscarServicio.jsx'; 
 import { serviciosData } from '../components/servicios/components/ListaServicios.jsx'; 
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function Servicios() {
   const navigation = useNavigation();
+  const { theme } = useTheme();
   
   const handlePress = (title) => {
     switch (title) {
@@ -33,7 +35,7 @@ export default function Servicios() {
   const { data } = useBuscarServicio(serviciosData); 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Nav />
       <StatusBar style="auto" translucent={true} />
       
@@ -44,7 +46,13 @@ export default function Servicios() {
       <View style={styles.containerList}>
         <FlatList
           data={data}
-          renderItem={({ item }) => <ItemsServicios item={item} handlePress={handlePress} />}
+          renderItem={({ item }) => (
+            <ItemsServicios 
+              item={item} 
+              handlePress={handlePress} 
+              theme={theme}
+            />
+          )}
           keyExtractor={(item) => item.id}
           numColumns={2}
         />
@@ -58,7 +66,6 @@ export default function Servicios() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -78,3 +85,4 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
 });
+

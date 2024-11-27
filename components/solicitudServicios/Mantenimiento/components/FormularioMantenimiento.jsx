@@ -11,6 +11,7 @@ export default function FormularioMantenimiento({
   products,
   handleDateChange,
   handleSolicitud,
+  theme,
 }) {
   const [showPicker, setShowPicker] = useState(false);
 
@@ -22,12 +23,12 @@ export default function FormularioMantenimiento({
     const dateValue = formData.fecha ? new Date(formData.fecha) : new Date();
 
     return (
-      <View style={styles.dateInputContainer}>
+      <View style={[styles.dateInputContainer, { backgroundColor: theme.dark ? theme.background : '#121212' }]}>
         <TouchableOpacity
           onPress={handleDatePress}
           style={styles.dateTextContainer}
         >
-          <Text style={styles.dateText}>
+          <Text style={[styles.dateText, { color: theme.text }]}>
             {dateValue.toISOString().split('T')[0]}
           </Text>
         </TouchableOpacity>
@@ -36,7 +37,7 @@ export default function FormularioMantenimiento({
           onPress={handleDatePress}
           style={styles.dateIconContainer}
         >
-          <Ionicons name="calendar-outline" size={24} color="black" />
+          <Ionicons name="calendar-outline" size={24} color={theme.text} />
         </TouchableOpacity>
 
         {showPicker && (
@@ -58,74 +59,79 @@ export default function FormularioMantenimiento({
   };
 
   return (
-    <View style={styles.contenido}>
-      <Text style={styles.titulo}>Solicitar mantenimiento</Text>
+    <View style={[styles.contenido, { backgroundColor: theme.background }]}>
+      <Text style={[styles.titulo, { color: theme.title }]}>Solicitar mantenimiento</Text>
 
-      <Text style={styles.label}>Nombre</Text>
+      <Text style={[styles.label, { color: theme.label }]}>Nombre</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.dark ? theme.background : '#121212', color: theme.text }]}
         placeholder="Escribe tu nombre"
+        placeholderTextColor={theme.text}
         value={formData.nombre}
         onChangeText={text => setFormData({ ...formData, nombre: text })}
       />
       {formErrors.nombre && <Text style={styles.error}>{formErrors.nombre}</Text>}
 
-      <Text style={styles.label}>Email</Text>
+      <Text style={[styles.label, { color: theme.label }]}>Email</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.dark ? theme.background : '#121212', color: theme.text }]}
         placeholder="Escribe tu email"
+        placeholderTextColor={theme.text}
         value={formData.email}
         onChangeText={text => setFormData({ ...formData, email: text })}
         keyboardType="email-address"
       />
       {formErrors.email && <Text style={styles.error}>{formErrors.email}</Text>}
 
-      <Text style={styles.label}>Teléfono</Text>
+      <Text style={[styles.label, { color: theme.label }]}>Teléfono</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.dark ? theme.background : '#121212', color: theme.text }]}
         placeholder="Escribe tu teléfono"
+        placeholderTextColor={theme.text}
         value={formData.telefono}
         onChangeText={text => setFormData({ ...formData, telefono: text })}
         keyboardType="numeric"
       />
       {formErrors.telefono && <Text style={styles.error}>{formErrors.telefono}</Text>}
 
-      <Text style={styles.label}>Dirección</Text>
+      <Text style={[styles.label, { color: theme.label }]}>Dirección</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.dark ? theme.background : '#121212', color: theme.text }]}
         placeholder="Escribe tu dirección"
+        placeholderTextColor={theme.text}
         value={formData.direccion}
         onChangeText={text => setFormData({ ...formData, direccion: text })}
       />
       {formErrors.direccion && <Text style={styles.error}>{formErrors.direccion}</Text>}
 
-      <Text style={styles.label}>Dispositivo</Text>
-      <View style={styles.pickerContainer}>
+      <Text style={[styles.label, { color: theme.label }]}>Dispositivo</Text>
+      <View style={[styles.pickerContainer, { backgroundColor: theme.dark ? theme.background : '#121212' }]}>
         <RNPickerSelect
           onValueChange={value => setFormData({ ...formData, dispositivo: value })}
           items={products.map(product => ({ label: product.name, value: product.name }))}
           placeholder={{ label: 'Selecciona un dispositivo', value: null }}
-          style={pickerSelectStyles}
+          style={pickerSelectStyles(theme)}
         />
       </View>
       {formErrors.dispositivo && <Text style={styles.error}>{formErrors.dispositivo}</Text>}
 
-      <Text style={styles.label}>Cantidad</Text>
+      <Text style={[styles.label, { color: theme.label }]}>Cantidad</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.dark ? theme.background : '#121212', color: theme.text }]}
         placeholder="Escribe la cantidad"
+        placeholderTextColor={theme.text}
         value={formData.cantidad}
         onChangeText={text => setFormData({ ...formData, cantidad: text })}
         keyboardType="numeric"
       />
       {formErrors.cantidad && <Text style={styles.error}>{formErrors.cantidad}</Text>}
 
-      <Text style={styles.label}>Fecha deseada</Text>
+      <Text style={[styles.label, { color: theme.label }]}>Fecha deseada</Text>
       {renderDatePicker()}
       {formErrors.fecha && <Text style={styles.error}>{formErrors.fecha}</Text>}
 
-      <TouchableOpacity style={styles.button} onPress={handleSolicitud}>
-        <Text style={styles.buttonText}>Enviar solicitud</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.buttonBackground }]} onPress={handleSolicitud}>
+        <Text style={[styles.buttonText, { color: theme.buttonText }]}>Enviar solicitud</Text>
       </TouchableOpacity>
     </View>
   );
@@ -139,20 +145,17 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 24,
-    color: 'white',
     marginBottom: 20,
     marginTop: 50,
   },
   label: {
     fontSize: 16,
-    color: 'white',
     marginBottom: 5,
     alignSelf: 'flex-start',
     width: '100%',
     marginTop: 10
   },
   input: {
-    backgroundColor: 'white',
     padding: 10,
     borderRadius: 10,
     marginBottom: 0,
@@ -160,7 +163,6 @@ const styles = StyleSheet.create({
     height: 40,
   },
   pickerContainer: {
-    backgroundColor: 'white',
     borderRadius: 10,
     marginBottom: 15,
     width: '100%',
@@ -170,7 +172,6 @@ const styles = StyleSheet.create({
   dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
     borderRadius: 10,
     marginBottom: 15,
     width: '100%',
@@ -183,7 +184,6 @@ const styles = StyleSheet.create({
   },
   dateText: {
     paddingLeft: 10,
-    color: 'black',
   },
   dateIconContainer: {
     position: 'absolute',
@@ -194,10 +194,8 @@ const styles = StyleSheet.create({
   datePicker: {
     width: '40%',
     marginRight: 5,
-    backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#f57600',
     padding: 12,
     borderRadius: 25,
     alignItems: 'center',
@@ -206,7 +204,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   buttonText: {
-    color: '#121212',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -217,15 +214,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const pickerSelectStyles = {
+const pickerSelectStyles = (theme) => ({
   inputIOS: {
     padding: 10,
     borderRadius: 10,
-    color: 'black',
+    color: theme.text,
   },
   inputAndroid: {
     padding: 10,
     borderRadius: 10,
-    color: 'black',
+    color: theme.text,
   },
-};
+});
+

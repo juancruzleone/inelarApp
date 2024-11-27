@@ -10,9 +10,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import ModalEditar from '../components/instaalaciones/components/ModalEditar';
 import ModalEliminarInstalacion from '../components/instaalaciones/components/ModalEliminar';
 import ModalExito from '../components/instaalaciones/components/ModalExito';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function Instalaciones() {
   const navigation = useNavigation();
+  const { theme } = useTheme();
   const {
     installations,
     filteredInstallations,
@@ -72,18 +74,18 @@ export default function Instalaciones() {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={styles.item}>
+      <View style={[styles.item, { backgroundColor: theme.menuBackground }]}>
         <TouchableOpacity onPress={() => handlePress(item)}>
           {item.image && <Image source={{ uri: item.image }} style={styles.image} />}
-          <Text style={styles.title}>{item.company || 'Sin nombre'}</Text>
-          <Text style={styles.category}>{item.installationType || 'Sin categoría'}</Text>
+          <Text style={[styles.title, { color: theme.text }]}>{item.company || 'Sin nombre'}</Text>
+          <Text style={[styles.category, { color: theme.text }]}>{item.installationType || 'Sin categoría'}</Text>
         </TouchableOpacity>
         <View style={styles.deviceActions}>
           <TouchableOpacity style={styles.editButton} onPress={() => handleEditInstallation(item)}>
-            <MaterialIcons name="edit" size={30} color="white"/>
+            <MaterialIcons name="edit" size={30} color={theme.text} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteInstallation(item)}>
-            <MaterialIcons name="delete" size={30} color="white" />
+            <MaterialIcons name="delete" size={30} color={theme.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -92,19 +94,19 @@ export default function Instalaciones() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#C75F00" />
-        <Text style={styles.loadingText}>Cargando instalaciones...</Text>
+      <View style={[styles.loadingContainer, { backgroundColor: theme.background }]}>
+        <ActivityIndicator size="large" color={theme.buttonBackground} />
+        <Text style={[styles.loadingText, { color: theme.text }]}>Cargando instalaciones...</Text>
       </View>
     );
   }
 
   if (error) {
-    return <Text style={styles.errorText}>Error: {error}</Text>;
+    return <Text style={[styles.errorText, { color: theme.text }]}>Error: {error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Nav />
       <StatusBar style="auto" translucent={true} />
       <View style={styles.containerBook}>
@@ -115,17 +117,17 @@ export default function Instalaciones() {
       </View>
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.searchBar}
+          style={[styles.searchBar, { backgroundColor: theme.menuBackground, color: theme.text }]}
           placeholder="Buscar instalación"
-          placeholderTextColor="black"
+          placeholderTextColor={theme.text}
           value={search}
           onChangeText={handleSearch}
         />
         <TouchableOpacity
-          style={styles.selectButton}
+          style={[styles.selectButton, { backgroundColor: theme.buttonBackground }]}
           onPress={() => actionSheetRef.show()}
         >
-          <Text style={styles.selectText}>
+          <Text style={[styles.selectText, { color: theme.buttonText }]}>
             {category || 'Seleccionar categoría'}
           </Text>
         </TouchableOpacity>
@@ -176,16 +178,13 @@ export default function Instalaciones() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1d1d1d',
   },
   loadingText: {
-    color: 'white',
     marginTop: 10,
   },
   containerBook: {
@@ -200,14 +199,12 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   searchBar: {
-    backgroundColor: '#f0f0f0',
     padding: 10,
     borderRadius: 10,
     fontSize: 16,
     marginBottom: 10,
   },
   selectButton: {
-    backgroundColor: '#C75F00',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -216,7 +213,6 @@ const styles = StyleSheet.create({
   },
   selectText: {
     fontSize: 16,
-    color: 'black',
     fontWeight: 'bold'
   },
   containerList: {
@@ -225,7 +221,6 @@ const styles = StyleSheet.create({
   },
   item: {
     marginVertical: 10,
-    backgroundColor: '#121212',
     borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 15,
@@ -239,12 +234,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
   },
   category: {
     marginTop: 5,
     fontSize: 14,
-    color: 'white',
   },
   deviceActions: {
     flexDirection: 'row',
@@ -261,3 +254,4 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
+

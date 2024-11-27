@@ -14,8 +14,10 @@ import ModalCrear from '../components/inicio/components/ModalCrear.jsx';
 import ModalExito from '../components/inicio/components/ModalExito.jsx';
 import useInstalaciones from '../components/inicio/hooks/useInstalaciones.jsx';
 import Nav from '../components/nav';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function Inicio() {
+  const { theme } = useTheme();
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState(null);
@@ -102,7 +104,7 @@ export default function Inicio() {
   }, [isSuccess]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Nav />
       <StatusBar style="auto" translucent={true} />
       <ContenedorBienvenida userName={userName} />
@@ -162,15 +164,15 @@ export default function Inicio() {
         visible={scanResultModalVisible}
         onRequestClose={() => setScanResultModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
-          <View style={[styles.modalContainer, styles.scanResultModalContainer]}>
-            <Text style={styles.modalTitle}>Código QR escaneado</Text>
-            <Text style={styles.modalData}>{scannedData}</Text>
+        <View style={[styles.modalBackground, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
+          <View style={[styles.modalContainer, styles.scanResultModalContainer, { backgroundColor: theme.menuBackground }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Código QR escaneado</Text>
+            <Text style={[styles.modalData, { color: theme.text }]}>{scannedData}</Text>
             <TouchableOpacity
-              style={styles.modalButton}
+              style={[styles.modalButton, { backgroundColor: theme.buttonBackground }]}
               onPress={() => setScanResultModalVisible(false)}
             >
-              <Text style={styles.modalButtonText}>Cerrar</Text>
+              <Text style={[styles.modalButtonText, { color: theme.buttonText }]}>Cerrar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -192,8 +194,11 @@ export default function Inicio() {
               style={StyleSheet.absoluteFillObject}
             />
           )}
-          <TouchableOpacity style={styles.closeScannerButton} onPress={() => setIsScanning(false)}>
-            <Text style={styles.closeScannerText}>Cerrar Escáner</Text>
+          <TouchableOpacity 
+            style={[styles.closeScannerButton, { backgroundColor: theme.buttonBackground }]} 
+            onPress={() => setIsScanning(false)}
+          >
+            <Text style={[styles.closeScannerText, { color: theme.buttonText }]}>Cerrar Escáner</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -204,7 +209,6 @@ export default function Inicio() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -234,12 +238,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: '#1b1b1b',
     borderRadius: 10,
     alignItems: 'center',
   },
@@ -249,22 +251,18 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
     marginBottom: 10,
   },
   modalData: {
     fontSize: 16,
-    color: '#fff',
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#121212',
     padding: 10,
     borderRadius: 10,
   },
   modalButtonText: {
     fontSize: 16,
-    color: '#fff',
   },
   scannerContainer: {
     flex: 1,
@@ -274,12 +272,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 40,
     right: 20,
-    backgroundColor: '#C75F00',
     padding: 10,
     borderRadius: 10,
   },
   closeScannerText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },

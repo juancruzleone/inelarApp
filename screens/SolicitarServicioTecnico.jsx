@@ -5,8 +5,10 @@ import Footer from '../components/footer';
 import FormularioServicioTecnico from '../components/solicitudServicios/ServicioTecnico/components/FormularioServicioTecnico.jsx';
 import ModalExito from '../components/solicitudServicios/ServicioTecnico/components/ModalExito.jsx';
 import { useSolicitudServicioTecnico } from '../components/solicitudServicios/ServicioTecnico/hooks/useSolicitudServicioTecnico.jsx';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function SolicitarServicioTecnico() {
+  const { theme } = useTheme();
   const {
     formData,
     setFormData,
@@ -24,8 +26,8 @@ export default function SolicitarServicioTecnico() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
       <View style={styles.navContainer}>
         <Nav />
       </View>
@@ -38,12 +40,14 @@ export default function SolicitarServicioTecnico() {
           handleDateChange={handleDateChange}
           handleSolicitud={handleSolicitud}
           handleChange={handleChange}
+          theme={theme}
         />
       </ScrollView>
       {modalVisible && (
         <ModalExito
           modalVisible={modalVisible}
           setModalVisible={handleCloseModal}
+          theme={theme}
         />
       )}
       <Footer />
@@ -54,7 +58,6 @@ export default function SolicitarServicioTecnico() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#333',
   },
   navContainer: {
     position: 'absolute',
@@ -70,3 +73,4 @@ const styles = StyleSheet.create({
     paddingBottom: 80, 
   },
 });
+

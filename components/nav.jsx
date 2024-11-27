@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsAdmin } from '../components/inicio/hooks/useIsAdmin.jsx';
+import { useTheme } from '../components/theme/ThemeContext.jsx';
 
 export default function Component() {
   const [showMenu, setShowMenu] = useState(false);
@@ -17,6 +18,7 @@ export default function Component() {
   const menuTranslateX = new Animated.Value(-menuWidth);
   const navigation = useNavigation();
   const isAdmin = useIsAdmin();
+  const { isDarkMode, toggleTheme, theme } = useTheme();
 
   useEffect(() => {
     Animated.spring(menuTranslateX, {
@@ -78,9 +80,9 @@ export default function Component() {
   };
 
   return (
-    <View style={[styles.container, styles.containerHeight]}>
+    <View style={[styles.container, styles.containerHeight, { backgroundColor: theme.navBackground }]}>
       <TouchableOpacity style={styles.menuButton} onPress={handleMenuPress}>
-        <Feather name={showMenu ? 'x' : 'menu'} size={24} color="white" style={styles.botonMenuHamburguesa} />
+        <Feather name={showMenu ? 'x' : 'menu'} size={24} color={theme.text} style={styles.botonMenuHamburguesa} />
       </TouchableOpacity>
 
       <View style={styles.logoContainer}>
@@ -97,25 +99,37 @@ export default function Component() {
             styles.menuContainer,
             {
               transform: [{ translateX: menuTranslateX }],
+              backgroundColor: theme.menuBackground,
             },
           ]}
         >
           <TouchableOpacity style={styles.closeButton} onPress={closeMenu}>
-            <Feather name="x" size={24} color="white" />
+            <Feather name="x" size={24} color={theme.text} />
           </TouchableOpacity>
           <View style={styles.menuItemsContainer}>
+            <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
+              <Feather 
+                name={isDarkMode ? 'sun' : 'moon'} 
+                size={24} 
+                color={theme.text} 
+              />
+              <Text style={[styles.themeToggleText, { color: theme.text }]}>
+                {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
+              </Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Inicio')}>
-              <Text style={styles.menuItemText}>Inicio</Text>
+              <Text style={[styles.menuItemText, { color: theme.text }]}>Inicio</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Servicios')}>
-              <Text style={styles.menuItemText}>Servicios</Text>
+              <Text style={[styles.menuItemText, { color: theme.text }]}>Servicios</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Capacitaciones')}>
-              <Text style={styles.menuItemText}>Manuales</Text>
+              <Text style={[styles.menuItemText, { color: theme.text }]}>Manuales</Text>
             </TouchableOpacity>
             {isAdmin && (
               <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigation('Instalaciones')}>
-                <Text style={styles.menuItemText}>Instalaciones</Text>
+                <Text style={[styles.menuItemText, { color: theme.text }]}>Instalaciones</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity style={[styles.menuItem, styles.botonCerrarSesion]} onPress={handleLogout}>
@@ -134,14 +148,14 @@ export default function Component() {
         onRequestClose={() => setScanResultModalVisible(false)}
       >
         <View style={styles.modalBackground}>
-          <View style={[styles.modalContainer, styles.scanResultModalContainer]}>
-            <Text style={styles.modalTitle}>Código QR escaneado</Text>
-            <Text style={styles.modalData}>{scannedData}</Text>
+          <View style={[styles.modalContainer, styles.scanResultModalContainer, { backgroundColor: theme.menuBackground }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Código QR escaneado</Text>
+            <Text style={[styles.modalData, { color: theme.text }]}>{scannedData}</Text>
             <TouchableOpacity
-              style={styles.modalButton}
+              style={[styles.modalButton, { backgroundColor: theme.buttonBackground }]}
               onPress={() => setScanResultModalVisible(false)}
             >
-              <Text style={styles.modalButtonText}>Cerrar</Text>
+              <Text style={[styles.modalButtonText, { color: theme.buttonText }]}>Cerrar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -177,7 +191,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#121212',
     paddingHorizontal: 16,
     zIndex: 9999990,
   },
@@ -214,7 +227,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    backgroundColor: '#121212',
     paddingVertical: 20,
     paddingHorizontal: 16,
     zIndex: 9999990,
@@ -234,7 +246,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   menuItemText: {
-    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -246,7 +257,6 @@ const styles = StyleSheet.create({
     width: 180,
     alignItems: 'center',
     marginTop: 15,
-
   },
   textoCerrarSesion: {
     color: '#121212',
@@ -262,7 +272,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: '#1b1b1b',
     borderRadius: 10,
     alignItems: 'center',
   },
@@ -272,22 +281,18 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
     marginBottom: 10,
   },
   modalData: {
     fontSize: 16,
-    color: '#fff',
     marginBottom: 20,
   },
   modalButton: {
-    backgroundColor: '#121212',
     padding: 10,
     borderRadius: 10,
   },
   modalButtonText: {
     fontSize: 16,
-    color: '#fff',
   },
   scannerContainer: {
     flex: 1,
@@ -329,9 +334,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  themeToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  themeToggleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
 });
 
 const ModalExito = ({ modalVisible, setModalVisible }) => {
+  const { theme } = useTheme();
   return (
     <Modal
       visible={modalVisible}
@@ -340,16 +359,17 @@ const ModalExito = ({ modalVisible, setModalVisible }) => {
       onRequestClose={() => setModalVisible(false)}
     >
       <View style={styles.modalBackground}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>¡Cierre de sesión exitoso!</Text>
+        <View style={[styles.modalContainer, { backgroundColor: theme.menuBackground }]}>
+          <Text style={[styles.modalTitle, { color: theme.text }]}>¡Cierre de sesión exitoso!</Text>
           <TouchableOpacity
-            style={styles.modalButton}
+            style={[styles.modalButton, { backgroundColor: theme.buttonBackground }]}
             onPress={() => setModalVisible(false)}
           >
-            <Text style={styles.modalButtonText}>Cerrar</Text>
+            <Text style={[styles.modalButtonText, { color: theme.buttonText }]}>Cerrar</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
 };
+

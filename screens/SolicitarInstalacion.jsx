@@ -5,8 +5,10 @@ import Footer from '../components/footer';
 import FormularioInstalacion from '../components/solicitudServicios/Instalacion/components/FormularioInstalacion.jsx';
 import ModalExito from '../components/solicitudServicios/Instalacion/components/ModalExito.jsx';
 import { useSolicitudInstalacion } from '../components/solicitudServicios/Instalacion/hooks/useSolicitudInstalacion.jsx';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function SolicitarInstalacion() {
+  const { theme } = useTheme();
   const {
     formData,
     setFormData,
@@ -22,7 +24,7 @@ export default function SolicitarInstalacion() {
   } = useSolicitudInstalacion();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <StatusBar barStyle="light-content" />
       <View style={styles.navContainer}>
         <Nav />
@@ -38,11 +40,13 @@ export default function SolicitarInstalacion() {
           handleDateChange={handleDateChange}
           handleDatePress={handleDatePress}
           handleSolicitud={handleSolicitud}
+          theme={theme}
         />
       </ScrollView>
       <ModalExito
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        theme={theme}
       />
       <Footer />
     </SafeAreaView>
@@ -52,7 +56,6 @@ export default function SolicitarInstalacion() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#333',
   },
   navContainer: {
     position: 'absolute',

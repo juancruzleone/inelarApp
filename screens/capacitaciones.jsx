@@ -4,8 +4,10 @@ import { StyleSheet, Text, View, TextInput, FlatList, Image, TouchableOpacity } 
 import { useNavigation } from '@react-navigation/native';
 import Nav from '../components/nav'
 import Footer from '../components/footer'
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function Capacitaciones() {
+  const { theme } = useTheme();
   const initialData = [
     { id: '1', title: 'Detectores', image: require('../assets/detector.png') },
     { id: '2', title: 'Mangueras', image: require('../assets/manguera.png') },
@@ -48,16 +50,16 @@ export default function Capacitaciones() {
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity onPress={() => handlePress(item.title)}>
-        <View style={styles.item}>
+        <View style={[styles.item, { backgroundColor: theme.menuBackground }]}>
           <Image source={item.image} style={styles.image} />
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={[styles.title, { color: theme.text }]}>{item.title}</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Nav />
       <StatusBar style="auto" translucent={true} />
       <View style={styles.containerBook}>
@@ -66,11 +68,11 @@ export default function Capacitaciones() {
           source={require('../assets/libro.png')}
         />
       </View>
-      <View style={styles.searchContainer}>
+      <View style={[styles.searchContainer, { backgroundColor: theme.menuBackground }]}>
         <TextInput
-          style={styles.searchBar}
+          style={[styles.searchBar, { color: theme.text }]}
           placeholder="Buscar"
-          placeholderTextColor="black"
+          placeholderTextColor={theme.text}
           value={search}
           onChangeText={handleSearch}
         />
@@ -91,14 +93,12 @@ export default function Capacitaciones() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
   searchContainer: {
     marginTop: 40,
     marginHorizontal: 10,
-    backgroundColor: 'white',
     borderRadius: 10,
     paddingHorizontal: 10,
     height: 40,
@@ -106,12 +106,10 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     fontSize: 16,
-    color: 'black',
     width: 300,
     textAlign: 'center',
   },
   item: {
-    backgroundColor: '#121212',
     padding: 20,
     borderRadius: 30,
     width: 140,
@@ -133,7 +131,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: 'white',
   },
   containerList: {
     marginTop: 20,

@@ -5,12 +5,14 @@ import Footer from '../components/footer';
 import Logo from '../components/capacitaciones/Detectores/components/Logo.jsx';
 import ErrorItem from '../components/capacitaciones/Detectores/components/ErrorItem';
 import { useErrorList } from '../components/capacitaciones/Detectores/hooks/useErrorList';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function CapacitacionDetectores() {
   const { errors, expandedError, toggleError } = useErrorList();
+  const { theme } = useTheme();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <StatusBar barStyle="light-content" />
       <View style={styles.navContainer}>
         <Nav />
@@ -37,7 +39,6 @@ export default function CapacitacionDetectores() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
   },
   navContainer: {
     position: 'absolute',

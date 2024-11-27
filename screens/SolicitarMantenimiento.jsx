@@ -5,8 +5,10 @@ import Footer from '../components/footer';
 import FormularioMantenimiento from '../components/solicitudServicios/Mantenimiento/components/FormularioMantenimiento.jsx';
 import ModalExito from '../components/solicitudServicios/Mantenimiento/components/ModalExito.jsx';
 import { useSolicitudMantenimiento } from '../components/solicitudServicios/Mantenimiento/hooks/useSolicitudMantenimiento.jsx';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function SolicitarMantenimiento() {
+  const { theme } = useTheme();
   const {
     formData,
     setFormData,
@@ -22,8 +24,8 @@ export default function SolicitarMantenimiento() {
   } = useSolicitudMantenimiento();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
+      <StatusBar barStyle={theme.dark ? "light-content" : "dark-content"} />
       <View style={styles.navContainer}>
         <Nav />
       </View>
@@ -38,11 +40,13 @@ export default function SolicitarMantenimiento() {
           handleDateChange={handleDateChange}
           handleDatePress={handleDatePress}
           handleSolicitud={handleSolicitud}
+          theme={theme}
         />
       </ScrollView>
       <ModalExito
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        theme={theme}
       />
       <Footer />
     </SafeAreaView>
@@ -52,7 +56,6 @@ export default function SolicitarMantenimiento() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#333',
   },
   navContainer: {
     position: 'absolute',
@@ -68,3 +71,4 @@ const styles = StyleSheet.create({
     paddingBottom: 80,
   },
 });
+
