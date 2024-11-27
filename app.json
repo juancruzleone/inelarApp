@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/iconoApp.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1d1d1d"
+      "backgroundColor": "#222222"
     },
     "assetBundlePatterns": [
       "**/*"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import LogoSVG from '../../../assets/logo.svg'; 
+import LogoSVG from '../../../assets/logo4.svg'; 
 
 const Logo = ({ width, height }) => (
   <View style={styles.logoContainer}>
