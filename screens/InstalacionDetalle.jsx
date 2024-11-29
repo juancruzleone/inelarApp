@@ -11,6 +11,7 @@ import ModalEliminar from '../components/InstalacionDetalle/components/ModalElim
 import ModalImprimir from '../components/InstalacionDetalle/components/ModalImprimir.jsx';
 import ModalExito from '../components/InstalacionDetalle/components/ModalExito.jsx';
 import { getLastMaintenanceForDevice } from '../components/InstalacionDetalle/services/FetchDispositivos.jsx';
+import { useTheme } from '../components/theme/ThemeContext';
 
 export default function InstalacionDetalle() {
   const route = useRoute();
@@ -25,6 +26,7 @@ export default function InstalacionDetalle() {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const { theme } = useTheme();
 
   const filteredDevices = devices.filter(device => 
     device.nombre && device.nombre.toLowerCase().includes(search.toLowerCase())
@@ -111,27 +113,27 @@ export default function InstalacionDetalle() {
   };
 
   const renderItem = ({ item }) => (
-    <View style={styles.deviceItem}>
-      <Text style={styles.deviceName}>{item.nombre || 'Sin nombre'}</Text>
+    <View style={[styles.deviceItem, { backgroundColor: theme.menuBackground }]}>
+      <Text style={[styles.deviceName, { color: theme.text }]}>{item.nombre || 'Sin nombre'}</Text>
       <View style={styles.contenidoDispositivo}>
-        <Text style={styles.deviceLocation}>{item.ubicacion || 'Sin ubicación'}</Text>
-        <Text style={styles.deviceCategory}>{item.categoria || 'Sin categoría'}</Text>
+        <Text style={[styles.deviceLocation, { color: theme.text }]}>{item.ubicacion || 'Sin ubicación'}</Text>
+        <Text style={[styles.deviceCategory, { color: theme.text }]}>{item.categoria || 'Sin categoría'}</Text>
       </View>
 
       <View style={styles.deviceActions}>
         {item.codigoQR && (
           <TouchableOpacity onPress={() => openPrintModal(item.codigoQR)}>
-            <Ionicons name="print" size={30} color="white" />
+            <Ionicons name="print" size={30} color={theme.text} />
           </TouchableOpacity>
         )}
         <TouchableOpacity onPress={() => handleEditDevice(item)}>
-          <MaterialIcons name="edit" size={30} color="white" />
+          <MaterialIcons name="edit" size={30} color={theme.text} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDeleteDevice(item)}>
-          <MaterialIcons name="delete" size={30} color="white" />
+          <MaterialIcons name="delete" size={30} color={theme.text} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleMaintenanceInfo(item)}>
-          <MaterialIcons name="build" size={30} color="white" />
+          <MaterialIcons name="build" size={30} color={theme.text} />
         </TouchableOpacity>
       </View>
     </View>
@@ -139,32 +141,34 @@ export default function InstalacionDetalle() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#C75F00" />
-        <Text style={styles.loadingText}>Cargando dispositivos...</Text>
+      <View style={[styles.loadingContainer, { backgroundColor: theme.background }]}>
+        <ActivityIndicator size="large" color={theme.buttonBackground} />
+        <Text style={[styles.loadingText, { color: theme.text }]}>Cargando dispositivos...</Text>
       </View>
     );
   }
 
   if (error) {
-    return <Text style={styles.errorText}>Error: {error}</Text>;
+    return <Text style={[styles.errorText, { color: theme.error }]}>Error: {error}</Text>;
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Nav />
-      <Text style={styles.installationName}>{installation.company || 'Instalación sin nombre'}</Text>
+      <Text style={[styles.installationName, { color: theme.title }]}>{installation.company || 'Instalación sin nombre'}</Text>
 
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Buscar dispositivo"
-        placeholderTextColor="gray"
-        value={search}
-        onChangeText={setSearch}
-      />
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={[styles.searchBar, { backgroundColor: theme.menuBackground, color: theme.text }]}
+          placeholder="Buscar dispositivo"
+          placeholderTextColor={theme.text}
+          value={search}
+          onChangeText={setSearch}
+        />
+      </View>
 
-      <TouchableOpacity style={styles.addButton} onPress={handleAddDevice}>
-        <Text style={styles.addButtonText}>Agregar Dispositivo</Text>
+      <TouchableOpacity style={[styles.addButton, { backgroundColor: theme.buttonBackground }]} onPress={handleAddDevice}>
+        <Text style={[styles.addButtonText, { color: theme.buttonText }]}>Agregar Dispositivo</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -214,24 +218,22 @@ export default function InstalacionDetalle() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1d1d1d',
   },
   installationName: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    margin: 20,
+  },
+  searchContainer: {
     margin: 20,
   },
   searchBar: {
-    backgroundColor: '#f0f0f0',
     padding: 10,
     borderRadius: 10,
     fontSize: 16,
-    margin: 20,
-    color: 'black',
+    marginBottom: 10,
   },
   addButton: {
-    backgroundColor: '#C75F00',
     padding: 10,
     borderRadius: 10,
     alignItems: 'center',
@@ -239,28 +241,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addButtonText: {
-    color: '#121212',
     fontWeight: 'bold',
     fontSize: 16,
   },
   deviceItem: {
-    backgroundColor: '#121212',
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
     marginHorizontal: 20,
   },
   deviceName: {
-    color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
   },
   deviceLocation: {
-    color: 'white',
     fontSize: 14,
   },
   deviceCategory: {
-    color: 'lightgray',
     fontSize: 14,
     marginBottom: 10,
   },
@@ -273,15 +270,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1d1d1d',
   },
   loadingText: {
-    color: 'white',
     marginTop: 10,
     fontSize: 16,
   },
   errorText: {
-    color: 'red',
     textAlign: 'center',
     marginTop: 20,
   },
@@ -289,3 +283,4 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 });
+
